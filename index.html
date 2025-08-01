@@ -5,88 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ReadyFiles Romania</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #fdfdfd;
-      color: #333;
+      background: linear-gradient(135deg, royalblue, goldenrod);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
     }
-    header {
-      background: linear-gradient(to right, royalblue, goldenrod);
+
+    aside {
+      width: 240px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px 20px;
+      height: 100vh;
+      position: fixed;
+    }
+
+    aside h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    aside ul {
+      list-style: none;
+    }
+
+    aside ul li {
+      margin: 10px 0;
+    }
+
+    aside ul li a {
       color: white;
-      padding: 60px 20px;
+      text-decoration: none;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 40px 20px;
+      flex: 1;
+    }
+
+    header {
       text-align: center;
+      margin-bottom: 40px;
     }
+
     h1 {
-      margin: 0;
-      font-size: 2.8rem;
+      font-family: 'Cinzel', serif;
+      font-size: 3rem;
+      color: #fff8dc;
     }
+
     h2 {
-      color: royalblue;
+      color: #fffbe0;
+      margin-top: 30px;
     }
+
     section {
       max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
     }
+
     ul {
       padding-left: 20px;
     }
+
+    ol {
+      padding-left: 20px;
+    }
+
     .footer {
       text-align: center;
       padding: 20px;
-      background: #f4f4f4;
-      color: #777;
+      color: #ddd;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 60%;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>📂 ReadyFiles Romania</h1>
-    <p>Start your business. We’ll guide the paperwork.</p>
-  </header>
-
-  <section>
-    <h2>🛠 What We Do</h2>
-    <p>We gather, explain, and organize all the paperwork and steps you need to legally open your business in Romania. Whether you’re starting a coffee shop in Cluj or an IT agency in Bucharest, we make it clear and simple.</p>
-  </section>
-
-  <section>
-    <h2>🚀 Why Use ReadyFiles?</h2>
+  <aside>
+    <h3>🔍 Menu</h3>
     <ul>
-      <li>✅ No more confusing forms or vague rules</li>
-      <li>✅ Info organized by city and business type</li>
-      <li>✅ Affordable all-in-one documents package (coming soon)</li>
-      <li>✅ Done-for-you service available (in partnership with City Hall – coming soon)</li>
+      <li><a href="#">Businesses</a></li>
+      <li><a href="#">Subscriptions</a></li>
+      <li><a href="#">Contact</a></li>
     </ul>
-  </section>
+  </aside>
 
-  <section>
-    <h2>🏢 Supported Business Types</h2>
-    <ul>
-      <li>Coffee Shops</li>
-      <li>Restaurants</li>
-      <li>IT Firms</li>
-      <li>Clothing Stores</li>
-      <li>Sales Agencies</li>
-      <li>Freelancers</li>
-      <li><em>More added regularly</em></li>
-    </ul>
-  </section>
+  <div class="main-content">
+    <header>
+      <h1>📂 ReadyFiles Romania</h1>
+      <p>Start your business. We’ll guide the paperwork.</p>
+    </header>
 
-  <section>
-    <h2>📋 How It Works</h2>
-    <ol>
-      <li><strong>Step 1:</strong> Choose your city and business type</li>
-      <li><strong>Step 2:</strong> Read the exact steps and download needed documents</li>
-      <li><strong>Step 3:</strong> Do it yourself — or pay us to do it for you</li>
-    </ol>
-    <p><em>*Full service and document generation coming soon</em></p>
-  </section>
+    <div class="search-bar">
+      <input type="text" placeholder="Search business types..." />
+    </div>
 
-  <footer class="footer">
-    <p>&copy; 2025 ReadyFiles Romania. All rights reserved.</p>
-  </footer>
+    <section>
+      <h2>🛠 What We Do</h2>
+      <p>We gather, explain, and organize all the paperwork and steps you need to legally open your business in Romania. Whether you’re starting a coffee shop in Cluj or an IT agency in Bucharest, we make it clear and simple.</p>
+    </section>
+
+    <section>
+      <h2>🚀 Why Use ReadyFiles?</h2>
+      <ul>
+        <li>✅ No more confusing forms or vague rules</li>
+        <li>✅ Info organized by city and business type</li>
+        <li>✅ Affordable all-in-one documents package (coming soon)</li>
+        <li>✅ Done-for-you service available (in partnership with City Hall – coming soon)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🏢 Supported Business Types</h2>
+      <ul>
+        <li><a href="#">Coffee Shops</a></li>
+        <li><a href="#">Restaurants</a></li>
+        <li><a href="#">IT Firms</a></li>
+        <li><a href="#">Clothing Stores</a></li>
+        <li><a href="#">Sales Agencies</a></li>
+        <li><a href="#">Freelancers</a></li>
+        <li><em>More added regularly</em></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📋 How It Works</h2>
+      <ol>
+        <li><strong>Step 1:</strong> Choose your city and business type</li>
+        <li><strong>Step 2:</strong> Read the exact steps and download needed documents</li>
+        <li><strong>Step 3:</strong> Do it yourself — or pay us to do it for you</li>
+      </ol>
+      <p><em>*Full service and document generation coming soon</em></p>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2025 ReadyFiles Romania. All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 </html>
-
