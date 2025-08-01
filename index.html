@@ -1,204 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ReadyFiles Romania</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Bit+Count+Mono+Single&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ReadyFiles Romania</title>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single&family=Josefin+Sans&family=Plus+Jakarta+Sans&display=swap" rel="stylesheet" />
+
+<style>
+  /* Reset */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Josefin Sans', sans-serif;
+    background: linear-gradient(135deg, royalblue 40%, goldenrod 90%);
+    min-height: 100vh;
+    color: #fff;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* Sidebar */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    background: rgba(0,0,50,0.9);
+    padding: 2rem 1.5rem;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: width 0.3s ease;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  #sidebar.collapsed {
+    width: 48px;
+    padding: 2rem 0.5rem;
+  }
+
+  #sidebar h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    color: #f0d6a9;
+    text-shadow: 0 0 3px #a37a00;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  nav a, nav button {
+    background: none;
+    border: none;
+    color: #eee;
+    cursor: pointer;
+    text-align: left;
+    padding: 0.4rem 0.2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.25s ease;
+    font-family: inherit;
+  }
+
+  nav a:hover, nav button:hover {
+    color: goldenrod;
+  }
+
+  nav button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .submenu {
+    margin-left: 1rem;
+    margin-top: 0.3rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .submenu.open {
+    display: flex;
+  }
+  .submenu a {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #ddd;
+    padding-left: 0.8rem;
+  }
+  .submenu a:hover {
+    color: gold;
+  }
+
+  #collapseBtn {
+    position: absolute;
+    top: 12px;
+    right: -24px;
+    width: 28px;
+    height: 28px;
+    background: goldenrod;
+    border: none;
+    border-radius: 6px;
+    color: #222;
+    font-weight: 700;
+    font-size: 1.4rem;
+    cursor: pointer;
+    user-select: none;
+    line-height: 0;
+    transition: background 0.3s ease;
+  }
+  #collapseBtn:hover {
+    background: #c5a100;
+  }
+
+  /* Main content */
+  #mainContent {
+    margin-left: 260px;
+    padding: 3rem 3rem 5rem 3rem;
+    flex: 1;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(218,165,32,0.3), transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(65,105,225,0.7), transparent 60%),
+      linear-gradient(135deg, royalblue 50%, goldenrod 90%);
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+    position: relative;
+  }
+  #mainContent.collapsed {
+    margin-left: 48px;
+    padding-left: 2rem;
+  }
+
+  /* Hero */
+  #hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin-bottom: 5rem;
+    position: relative;
+  }
+
+  #hero .hero-text {
+    max-width: 600px;
+  }
+
+  #hero h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 3.8rem;
+    color: #f7e8c3;
+    text-shadow: 0 0 3px #8c6a00;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+
+  #hero p {
+    font-family: 'Bitcount Single', monospace;
+    font-size: 1.6rem;
+    color: #f3e8c9;
+    letter-spacing: 0.05em;
+    animation: fadeInMove 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes fadeInMove {
+    0% {
+      opacity: 0.8;
+      transform: translateY(0);
     }
-
-    body {
-      font-family: 'Josefin Sans', sans-serif;
-      background: linear-gradient(135deg, royalblue, goldenrod);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
+    100% {
+      opacity: 1;
+      transform: translateY(-8px);
     }
+  }
 
-    aside {
-      width: 240px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 30px 20px;
-      height: 100vh;
+  /* Search bar */
+  .search-container {
+    width: 320px;
+    position: relative;
+  }
+
+  .search-container input {
+    width: 100%;
+    padding: 0.7rem 1.2rem;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Josefin Sans', sans-serif;
+    outline: none;
+    color: #333;
+    box-shadow: 0 0 15px 3px rgba(255, 215, 0, 0.4);
+  }
+  .search-container input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+
+  /* FAQ */
+  #faq {
+    max-width: 900px;
+    margin: 0 auto 4rem auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 0 15px 1px rgba(255, 215, 0, 0.3);
+  }
+  #faq h2 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1.8rem;
+    text-align: center;
+    color: #fffbe0;
+    text-shadow: 0 0 5px goldenrod;
+  }
+  details {
+    background: rgba(255, 255, 255, 0.15);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.15rem;
+  }
+  details summary {
+    font-weight: 700;
+    outline: none;
+    user-select: none;
+  }
+  details[open] {
+    background: gold;
+    color: #000;
+    box-shadow: 0 0 10px 2px #ffd700;
+  }
+
+  /* Pricing */
+  #pricing {
+    max-width: 1000px;
+    margin: 0 auto 5rem auto;
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem;
+  }
+  .plan {
+    background: rgba(255, 215, 0, 0.9);
+    color: #222;
+    border-radius: 15px;
+    padding: 2rem 2.2rem;
+    width: 30%;
+    box-shadow: 0 0 15px gold;
+    text-align: center;
+    transition: transform 0.3s ease;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+  .plan:hover {
+    transform: scale(1.05);
+  }
+  .plan h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.9rem;
+    margin-bottom: 1rem;
+  }
+  .plan .price {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+  }
+  .plan ul {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+  .plan ul li {
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+  .plan button {
+    background: royalblue;
+    color: goldenrod;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(72, 61, 139, 0.7);
+    transition: background 0.3s ease;
+  }
+  .plan button:hover {
+    background: #1a237e;
+  }
+
+  /* About */
+  #about {
+    max-width: 900px;
+    margin: 0 auto 6rem auto;
+    background: rgba(0, 0, 139, 0.4);
+    border-radius: 12px;
+    padding: 2.5rem 3rem;
+    color: #f7e8c3;
+    font-family: 'Josefin Sans', sans-serif;
+    box-shadow: 0 0 15px 2px rgba(218,165,32,0.5);
+  }
+  #about h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-shadow: 0 0 5px goldenrod;
+  }
+  #about p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* Footer */
+  footer {
+    background: rgba(0,0,50,0.85);
+    color: #ddd;
+    padding: 2rem 2rem;
+    text-align: center;
+    font-family: 'Josefin Sans', sans-serif;
+    box-shadow: 0 -3px 10px rgba(0,0,50,0.8);
+  }
+  footer a {
+    color: goldenrod;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 0.8rem;
+    transition: color 0.3s ease;
+  }
+  footer a:hover {
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    #pricing {
+      flex-direction: column;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .plan {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    #hero {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #hero .search-container {
+      width: 100%;
+      margin-top: 2rem;
+    }
+    #sidebar {
       position: fixed;
+      z-index: 101;
+      height: 100vh;
     }
-
-    aside h3 {
-      font-size: 1.3rem;
-      margin-bottom: 15px;
-    }
-
-    aside ul {
-      list-style: none;
-    }
-
-    aside ul li {
-      margin: 10px 0;
-    }
-
-    aside ul li a {
-      color: white;
-      text-decoration: none;
-    }
-
-    .main-content {
-      margin-left: 260px;
-      padding: 60px 20px 40px 20px;
-      flex: 1;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 100px;
-    }
-
-    .hero-text-container h1 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 3rem;
-      color: #fff8dc;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-family: 'Bit Count Mono Single', monospace;
-      font-size: 1.3rem;
-      color: #fffbe0;
-      margin-bottom: 30px;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 3px solid #fffbe0;
-      width: 52ch;
-      margin: 0 auto 40px auto;
-      animation: typing 4s steps(52), blink 0.7s step-end infinite alternate;
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 52ch; }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
-      100% { border-color: #fffbe0; }
-    }
-
-    .search-bar {
-      text-align: center;
-    }
-
-    .search-bar input {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      width: 60%;
-      max-width: 400px;
-    }
-
-    section {
-      max-width: 800px;
-      margin: 60px auto;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    h2 {
-      color: #fffbe0;
-      margin-bottom: 10px;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    ol {
-      padding-left: 20px;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 30px;
-      color: #ddd;
-      margin-top: 60px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-  </style>
+  }
+</style>
 </head>
 <body>
-  <aside>
-    <h3>🔍 Menu</h3>
-    <ul>
-      <li><a href="#">Business Type Categories</a></li>
-      <li><a href="#">Document Checklist</a></li>
-      <li><a href="#">Useful Tools</a></li>
-      <li><a href="#">Quick Links</a></li>
-      <li><a href="#">Language Switcher</a></li>
-      <li><a href="#">Contact / Help</a></li>
-    </ul>
-  </aside>
 
-  <div class="main-content">
-    <header class="hero">
-      <div class="hero-text-container">
-        <h1>📂 ReadyFiles Romania</h1>
-        <h3 class="subtitle">Simple solutions for opening your business — fast, reliable, done-for-you!</h3>
-        <div class="search-bar">
-          <input type="text" placeholder="Search business types..." />
-        </div>
-      </div>
-    </header>
+<div id="sidebar">
+  <h3>ReadyFiles</h3>
+  <nav>
+    <a href="#hero">Home</a>
+    <button id="faqToggleBtn">FAQ &#9662;</button>
+    <div class="submenu" id="faqSubmenu">
+      <a href="#faq">Open FAQ</a>
+    </div>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+  </nav>
+  <button id="collapseBtn" title="Toggle Sidebar"><</button>
+</div>
 
-    <section>
-      <h2>🛠 What We Do</h2>
-      <p>We gather, explain, and organize all the paperwork and steps you need to legally open your business in Romania. Whether you’re starting a coffee shop in Cluj or an IT agency in Bucharest, we make it clear and simple.</p>
-    </section>
+<div id="mainContent">
+  <section id="hero">
+    <div class="hero-text">
+      <h1>ReadyFiles Romania</h1>
+      <p>Simple solutions for opening your business — fast, reliable, done-for-you!</p>
+    </div>
+    <div class="search-container">
+      <input type="search" placeholder="Search services, documents..." aria-label="Search" />
+    </div>
+  </section>
 
-    <section>
-      <h2>🚀 Why Use ReadyFiles?</h2>
+  <section id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details>
+      <summary>How quickly can you process my documents?</summary>
+      <p>We typically process standard documents within 3 business days. Custom services may take longer depending on complexity.</p>
+    </details>
+    <details>
+      <summary>What is included in the premium package?</summary>
+      <p>Our premium package covers everything from paperwork to submission and follow-ups — a fully done-for-you service.</p>
+    </details>
+    <details>
+      <summary>Can I cancel or change my order?</summary>
+      <p>Yes, you can cancel or modify your order within 24 hours without penalty. After that, fees may apply.</p>
+    </details>
+  </section>
+
+  <section id="pricing">
+    <div class="plan">
+      <h3>Basic Package</h3>
+      <div class="price">€3</div>
       <ul>
-        <li>✅ No more confusing forms or vague rules</li>
-        <li>✅ Info organized by city and business type</li>
-        <li>✅ Affordable all-in-one documents package (coming soon)</li>
-        <li>✅ Done-for-you service available (in partnership with City Hall – coming soon)</li>
+        <li>Access to standard documents</li>
+        <li>DIY with guidance</li>
+        <li>Email support</li>
       </ul>
-    </section>
+      <button>Choose Basic</button>
+    </div>
 
-    <section>
-      <h2>🏢 Supported Business Types</h2>
+    <div class="plan">
+      <h3>Standard Package</h3>
+      <div class="price">€9.99</div>
       <ul>
-        <li><a href="#">Coffee Shops</a></li>
-        <li><a href="#">Restaurants</a></li>
-        <li><a href="#">IT Firms</a></li>
-        <li><a href="#">Clothing Stores</a></li>
-        <li><a href="#">Sales Agencies</a></li>
-        <li><a href="#">Freelancers</a></li>
-        <li><em>More added regularly</em></li>
+        <li>All basic features</li>
+        <li>Document review and help</li>
+        <li>Phone support</li>
       </ul>
-    </section>
+      <button>Choose Standard</button>
+    </div>
 
-    <section>
-      <h2>📋 How It Works</h2>
-      <ol>
-        <li><strong>Step 1:</strong> Choose your city and business type</li>
-        <li><strong>Step 2:</strong> Read the exact steps and download needed documents</li>
-        <li><strong>Step 3:</strong> Do it yourself — or pay us to do it for you</li>
-      </ol>
-      <p><em>*Full service and document generation coming soon</em></p>
-    </section>
+    <div class="plan">
+      <h3>Premium Package</h3>
+      <div class="price">Custom Price</div>
+      <ul>
+        <li>Complete done-for-you paperwork</li>
+        <li>Personalized consultation</li>
+        <li>Priority processing</li>
+      </ul>
+      <button>Contact Us</button>
+    </div>
+  </section>
 
-    <footer class="footer">
-      <p>🏠 Home | About | Contact | Affiliate Program | FAQ</p>
-      <p>&copy; 2025 ReadyFiles Romania. All rights reserved.</p>
-    </footer>
-  </div>
+  <section id="about">
+    <h2>About Us</h2>
+    <p>Details coming soon. We're dedicated to simplifying business setup in Romania with trustworthy and fast document solutions.</p>
+  </section>
+
+  <footer>
+    <p>© 2025 ReadyFiles Romania | 
+      <a href="#about">About</a> | 
+      <a href="#faq">FAQ</a> | 
+      <a href="mailto:contact@readyfiles.ro">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+  // Sidebar collapse toggle
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const collapseBtn = document.getElementById('collapseBtn');
+
+  collapseBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('collapsed');
+    if (sidebar.classList.contains('collapsed')) {
+      collapseBtn.textContent = '>';
+    } else {
+      collapseBtn.textContent = '<';
+    }
+  });
+
+  // FAQ submenu toggle
+  const faqToggleBtn = document.getElementById('faqToggleBtn');
+  const faqSubmenu = document.getElementById('faqSubmenu');
+
+  faqToggleBtn.addEventListener('click', () => {
+    faqSubmenu.classList.toggle('open');
+    faqToggleBtn.innerHTML = faqSubmenu.classList.contains('open') 
+      ? 'FAQ &#9652;' 
+      : 'FAQ &#9662;';
+  });
+</script>
+
 </body>
 </html>
