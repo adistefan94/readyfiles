@@ -274,4 +274,228 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 1.9rem;
     margin-bottom: 1rem;
- 
+  }
+  .plan .price {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+  }
+  .plan ul {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+  .plan ul li {
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+  .plan button {
+    background: royalblue;
+    color: goldenrod;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(72, 61, 139, 0.7);
+    transition: background 0.3s ease;
+  }
+  .plan button:hover {
+    background: #1a237e;
+  }
+
+  /* About */
+  #about {
+    max-width: 900px;
+    margin: 0 auto 6rem auto;
+    background: rgba(0, 0, 139, 0.4);
+    border-radius: 12px;
+    padding: 2.5rem 3rem;
+    color: #f7e8c3;
+    font-family: 'Josefin Sans', sans-serif;
+    box-shadow: 0 0 15px 2px rgba(218,165,32,0.5);
+  }
+  #about h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-shadow: 0 0 5px goldenrod;
+  }
+  #about p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* Footer */
+  footer {
+    background: rgba(0,0,50,0.85);
+    color: #ddd;
+    padding: 2rem 2rem;
+    text-align: center;
+    font-family: 'Josefin Sans', sans-serif;
+    box-shadow: 0 -3px 10px rgba(0,0,50,0.8);
+  }
+  footer a {
+    color: goldenrod;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 0.8rem;
+    transition: color 0.3s ease;
+  }
+  footer a:hover {
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    #pricing {
+      flex-direction: column;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .plan {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    #hero {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #hero .search-container {
+      width: 100%;
+      margin-top: 2rem;
+    }
+    #sidebar {
+      position: fixed;
+      z-index: 101;
+      height: 100vh;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h3>ReadyFiles</h3>
+  <nav>
+    <a href="#hero">Home</a>
+    <button id="faqToggleBtn">FAQ &#9662;</button>
+    <div class="submenu" id="faqSubmenu">
+      <a href="#faq">Open FAQ</a>
+    </div>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+  </nav>
+  <button id="collapseBtn" title="Toggle Sidebar"><</button>
+</div>
+
+<div id="mainContent">
+  <section id="hero">
+    <div class="hero-text">
+      <h1>ReadyFiles Romania</h1>
+      <p>Simple solutions for opening your business — fast, reliable, done-for-you!</p>
+    </div>
+    <div class="search-container">
+      <input type="search" placeholder="Search services, documents..." aria-label="Search" />
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details>
+      <summary>How quickly can you process my documents?</summary>
+      <p>We typically process standard documents within 3 business days. Custom services may take longer depending on complexity.</p>
+    </details>
+    <details>
+      <summary>What is included in the premium package?</summary>
+      <p>Our premium package covers everything from paperwork to submission and follow-ups — a fully done-for-you service.</p>
+    </details>
+    <details>
+      <summary>Can I cancel or change my order?</summary>
+      <p>Yes, you can cancel or modify your order within 24 hours without penalty. After that, fees may apply.</p>
+    </details>
+  </section>
+
+  <section id="pricing">
+    <div class="plan">
+      <h3>Basic Package</h3>
+      <div class="price">€3</div>
+      <ul>
+        <li>Access to standard documents</li>
+        <li>DIY with guidance</li>
+        <li>Email support</li>
+      </ul>
+      <button>Choose Basic</button>
+    </div>
+
+    <div class="plan">
+      <h3>Standard Package</h3>
+      <div class="price">€9.99</div>
+      <ul>
+        <li>All basic features</li>
+        <li>Document review and help</li>
+        <li>Phone support</li>
+      </ul>
+      <button>Choose Standard</button>
+    </div>
+
+    <div class="plan">
+      <h3>Premium Package</h3>
+      <div class="price">Custom Price</div>
+      <ul>
+        <li>Complete done-for-you paperwork</li>
+        <li>Personalized consultation</li>
+        <li>Priority processing</li>
+      </ul>
+      <button>Contact Us</button>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <p>Details coming soon. We're dedicated to simplifying business setup in Romania with trustworthy and fast document solutions.</p>
+  </section>
+
+  <footer>
+    <p>© 2025 ReadyFiles Romania | 
+      <a href="#about">About</a> | 
+      <a href="#faq">FAQ</a> | 
+      <a href="mailto:contact@readyfiles.ro">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+  // Sidebar collapse toggle
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const collapseBtn = document.getElementById('collapseBtn');
+
+  collapseBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('collapsed');
+    if (sidebar.classList.contains('collapsed')) {
+      collapseBtn.textContent = '>';
+    } else {
+      collapseBtn.textContent = '<';
+    }
+  });
+
+  // FAQ submenu toggle
+  const faqToggleBtn = document.getElementById('faqToggleBtn');
+  const faqSubmenu = document.getElementById('faqSubmenu');
+
+  faqToggleBtn.addEventListener('click', () => {
+    faqSubmenu.classList.toggle('open');
+    faqToggleBtn.innerHTML = faqSubmenu.classList.contains('open') 
+      ? 'FAQ &#9652;' 
+      : 'FAQ &#9662;';
+  });
+</script>
+
+</body>
+</html>
