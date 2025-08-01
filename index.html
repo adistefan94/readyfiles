@@ -2,169 +2,286 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ReadyFiles Romania</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single&family=Josefin+Sans&family=Playfair+Display&display=swap" rel="stylesheet" />
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
-
+    /* Reset & basics */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, royalblue, goldenrod);
-      color: #fff;
+      font-family: 'Josefin Sans', sans-serif;
+      background: linear-gradient(135deg, royalblue 40%, goldenrod 90%);
       min-height: 100vh;
+      color: #fff;
       display: flex;
+      overflow-x: hidden;
     }
 
+    /* Side Toolbar */
     aside {
-      width: 240px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 30px 20px;
-      height: 100vh;
       position: fixed;
+      top: 0; left: 0;
+      width: 240px;
+      height: 100vh;
+      background: rgba(0,0,50,0.85);
+      padding: 2rem 1.5rem;
+      box-shadow: 4px 0 10px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
-
     aside h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      color: gold;
+      text-shadow: 0 0 5px #ffd700;
+    }
+    aside nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+      display: block;
+    }
+    aside nav a:hover {
+      color: goldenrod;
+    }
+
+    /* Main content area */
+    main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, royalblue 60%, goldenrod 100%);
+      position: relative;
+      overflow-y: auto;
+    }
+
+    /* Waves background effect */
+    main::before {
+      content: "";
+      position: absolute;
+      top: -50px; left: 0; right: 0; bottom: 0;
+      background:
+        url('https://svgshare.com/i/qme.svg') repeat-x; /* wave SVG pattern */
+      background-size: contain;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem;
+      color: #fff8dc;
+      text-shadow: 0 0 10px gold;
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      font-family: 'Bitcount Single', monospace;
       font-size: 1.3rem;
-      margin-bottom: 15px;
+      color: #fff9cc;
+      letter-spacing: 0.05em;
     }
 
-    aside ul {
-      list-style: none;
+    /* Accordion FAQ */
+    .faq {
+      max-width: 800px;
+      margin: 0 auto 4rem auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 15px 1px rgba(255, 215, 0, 0.3);
+    }
+    .faq h2 {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #fffbe0;
+      text-shadow: 0 0 5px goldenrod;
+    }
+    details {
+      background: rgba(255, 255, 255, 0.15);
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+    details summary {
+      font-weight: 700;
+      outline: none;
+      user-select: none;
+    }
+    details[open] {
+      background: gold;
+      color: #000;
+      box-shadow: 0 0 10px 2px #ffd700;
     }
 
-    aside ul li {
-      margin: 10px 0;
+    /* Pricing */
+    .pricing {
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+    }
+    .pricing .plan {
+      background: rgba(255, 215, 0, 0.9);
+      color: #222;
+      border-radius: 15px;
+      padding: 2rem;
+      width: 28%;
+      box-shadow: 0 0 15px gold;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .pricing .plan:hover {
+      transform: scale(1.05);
+    }
+    .plan h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .plan p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .plan button {
+      background: royalblue;
+      color: gold;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .plan button:hover {
+      background: #003366;
     }
 
-    aside ul li a {
-      color: white;
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 50, 0.85);
+      color: #ddd;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      box-shadow: inset 0 5px 10px rgba(255,215,0,0.3);
+    }
+    footer .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    footer .footer-content div {
+      min-width: 140px;
+    }
+    footer a {
+      color: gold;
       text-decoration: none;
     }
-
-    .main-content {
-      margin-left: 260px;
-      padding: 40px 20px;
-      flex: 1;
+    footer a:hover {
+      text-decoration: underline;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 40px;
+    /* Responsive */
+    @media(max-width: 850px) {
+      .pricing {
+        flex-direction: column;
+        align-items: center;
+      }
+      .pricing .plan {
+        width: 80%;
+      }
+      aside {
+        width: 180px;
+        padding: 1rem 1rem;
+      }
+      main {
+        margin-left: 190px;
+        padding: 2rem 1rem;
+      }
     }
-
-    h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 3rem;
-      color: #fff8dc;
-    }
-
-    h2 {
-      color: #fffbe0;
-      margin-top: 30px;
-    }
-
-    section {
-      max-width: 800px;
-      margin: 20px auto;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    ol {
-      padding-left: 20px;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #ddd;
-    }
-
-    .search-bar {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .search-bar input {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      width: 60%;
+    @media(max-width: 450px) {
+      aside {
+        display: none;
+      }
+      main {
+        margin-left: 0;
+        padding: 1rem 1rem;
+      }
     }
   </style>
 </head>
 <body>
+
   <aside>
-    <h3>🔍 Menu</h3>
-    <ul>
-      <li><a href="#">Businesses</a></li>
-      <li><a href="#">Subscriptions</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
+    <h3>ReadyFiles Menu</h3>
+    <nav>
+      <a href="#hero">Home</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#footer">Contact</a>
+    </nav>
   </aside>
 
-  <div class="main-content">
-    <header>
-      <h1>📂 ReadyFiles Romania</h1>
+  <main>
+    <section id="hero" class="hero">
+      <h1>ReadyFiles Romania</h1>
       <p>Start your business. We’ll guide the paperwork.</p>
-    </header>
-
-    <div class="search-bar">
-      <input type="text" placeholder="Search business types..." />
-    </div>
-
-    <section>
-      <h2>🛠 What We Do</h2>
-      <p>We gather, explain, and organize all the paperwork and steps you need to legally open your business in Romania. Whether you’re starting a coffee shop in Cluj or an IT agency in Bucharest, we make it clear and simple.</p>
     </section>
 
-    <section>
-      <h2>🚀 Why Use ReadyFiles?</h2>
-      <ul>
-        <li>✅ No more confusing forms or vague rules</li>
-        <li>✅ Info organized by city and business type</li>
-        <li>✅ Affordable all-in-one documents package (coming soon)</li>
-        <li>✅ Done-for-you service available (in partnership with City Hall – coming soon)</li>
-      </ul>
+    <section id="faq" class="faq">
+      <h2>Frequently Asked Questions</h2>
+      <details>
+        <summary>How do I start a business in Romania?</summary>
+        <p>Choose your city and business type, then follow our clear step-by-step instructions.</p>
+      </details>
+      <details>
+        <summary>What documents are needed?</summary>
+        <p>We provide downloadable templates and detailed lists for every business niche.</p>
+      </details>
+      <details>
+        <summary>Can you handle paperwork for me?</summary>
+        <p>Yes! Our done-for-you service is coming soon in collaboration with City Hall.</p>
+      </details>
     </section>
 
-    <section>
-      <h2>🏢 Supported Business Types</h2>
-      <ul>
-        <li><a href="#">Coffee Shops</a></li>
-        <li><a href="#">Restaurants</a></li>
-        <li><a href="#">IT Firms</a></li>
-        <li><a href="#">Clothing Stores</a></li>
-        <li><a href="#">Sales Agencies</a></li>
-        <li><a href="#">Freelancers</a></li>
-        <li><em>More added regularly</em></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>📋 How It Works</h2>
-      <ol>
-        <li><strong>Step 1:</strong> Choose your city and business type</li>
-        <li><strong>Step 2:</strong> Read the exact steps and download needed documents</li>
-        <li><strong>Step 3:</strong> Do it yourself — or pay us to do it for you</li>
-      </ol>
-      <p><em>*Full service and document generation coming soon</em></p>
-    </section>
-
-    <footer class="footer">
-      <p>&copy; 2025 ReadyFiles Romania. All rights reserved.</p>
-    </footer>
-  </div>
-</body>
-</html>
+    <section id="pricing" class="pricing">
+      <div class="plan">
+        <h3>Basic</h3>
+        <p>Access all info and documents by yourself.</p>
+        <button>€9 / month</button>
+      </div>
+      <div class="plan">
+        <h3>Premium</h3>
+        <p>Includes personalized advice and extra support.</p>
+        <button>€29 / month</button>
+      </div>
+      <div class="plan">
+        <h3>All-Inclusive</h3>
+        <p>We handle everything
