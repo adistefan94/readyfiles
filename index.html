@@ -1,126 +1,221 @@
-// Import necessary components and libraries
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Accordion, AccordionItem } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+<!DOCTYPE html>
+<html lang="en">
 
-export default function BusinessHelperSiteV2() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Helper</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/bitcount" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-blue-500 to-yellow-300 text-black font-[Josefin_Sans]">
-      {/* Header */}
-      <header className="flex justify-between items-center p-4 bg-blue-800 text-white">
-        <h1 className="text-3xl font-oswald">Business Helper</h1>
-      </header>
+    body {
+      font-family: 'Josefin Sans', sans-serif;
+      background: linear-gradient(135deg, gold, blue);
+      color: #000;
+    }
 
-      {/* Main Layout */}
-      <div className="flex">
-        {/* Sidebar */}
-        {sidebarOpen && (
-          <aside className="w-64 bg-blue-900 text-white p-4 space-y-4">
-            <div className="cursor-pointer" onClick={() => setSidebarOpen(false)}>Collapse</div>
-            <div>Business Type Categories</div>
-            <div>Document Checklist</div>
-            <div>Useful Tools</div>
-            <div>Quick Links</div>
-            <div>Language Switcher</div>
-            <div>Contact / Help</div>
-          </aside>
-        )}
-        {!sidebarOpen && (
-          <div className="w-12 bg-blue-900 text-white flex items-center justify-center cursor-pointer" onClick={() => setSidebarOpen(true)}>»</div>
-        )}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: #002f6c;
+      color: white;
+    }
 
-        {/* Content */}
-        <main className="flex-1 p-6 space-y-10">
-          {/* Hero Section */}
-          <section className="relative bg-yellow-300 rounded-2xl p-10 shadow-xl text-center text-black">
-            <h1 className="text-5xl font-oswald">Start Your Business in Romania</h1>
-            <p className="text-2xl mt-4 font-[Bitcount] animate-marquee whitespace-nowrap overflow-hidden">
-              Complete Guidance • Step-by-Step Documents • Local Expertise
-            </p>
-            <div className="absolute right-10 top-1/2 transform -translate-y-1/2 w-1/3">
-              <Input placeholder="Search for your business type..." className="text-black bg-white" />
-            </div>
-          </section>
+    .sidebar {
+      width: 220px;
+      background-color: #111;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 1rem;
+      overflow-y: auto;
+    }
 
-          {/* FAQ Section */}
-          <section className="bg-blue-100 p-6 rounded-xl">
-            <h2 className="text-2xl font-semibold mb-4">FAQs</h2>
-            <Accordion type="multiple">
-              <AccordionItem value="how-it-works" title="How It Works">
-                Step-by-step instructions, document samples, and expert guides.
-              </AccordionItem>
-              <AccordionItem value="what-we-do" title="What Do We Do">
-                We provide info packs or handle the documents for you.
-              </AccordionItem>
-            </Accordion>
-          </section>
+    .sidebar h3 {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
 
-          {/* Menu Sections */}
-          <section className="space-y-4">
-            <Card>
-              <CardContent>
-                <h3 className="text-xl font-semibold">Business Categories</h3>
-                <p>Restaurants, Coffee Shops, IT Firms, Retail, and more...</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <h3 className="text-xl font-semibold">Romania Cities</h3>
-                <p>Bucharest, Cluj, Timișoara, Iași, Constanța...</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <h3 className="text-xl font-semibold">Countries (Coming Soon)</h3>
-                <p>Europe, Asia, North America, Africa, Australia</p>
-              </CardContent>
-            </Card>
-          </section>
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
 
-          {/* Pricing Section */}
-          <section className="bg-yellow-200 p-6 rounded-xl">
-            <h2 className="text-2xl font-semibold mb-4">Pricing</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardContent>
-                  <h3 className="text-xl font-semibold">€14.99</h3>
-                  <p>Full Info for All Papers</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <h3 className="text-xl font-semibold">Contact Us</h3>
-                  <p>Full Info + We Do It For You</p>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+    .sidebar ul li {
+      margin: 8px 0;
+      cursor: pointer;
+    }
 
-          {/* Footer */}
-          <footer className="bg-blue-800 text-white text-center p-6 mt-10 rounded-t-xl">
-            <p>About Us | Contact | Legal | Terms</p>
-            <p>© 2025 Business Helper</p>
-          </footer>
-        </main>
-      </div>
+    .hero {
+      margin-left: 230px;
+      padding: 2rem;
+      font-family: 'Oswald', sans-serif;
+    }
 
-      {/* Decorative Background (Swirls/Chains) */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="swirlGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="crimson" />
-              <stop offset="100%" stopColor="black" />
-            </linearGradient>
-          </defs>
-          <path fill="none" stroke="url(#swirlGradient)" strokeWidth="2" d="M0,50 C150,150 300,0 450,100 C600,200 750,50 900,150" />
-          <path fill="none" stroke="url(#swirlGradient)" strokeWidth="2" d="M0,200 C150,300 300,150 450,250 C600,350 750,200 900,300" />
-        </svg>
-      </div>
+    .hero h1 {
+      font-size: 3rem;
+    }
+
+    .hero h2 {
+      font-family: 'Bitcount', monospace;
+      font-size: 1.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero h2::before {
+      content: attr(data-text);
+      position: absolute;
+      animation: loopTypewriter 10s linear infinite;
+    }
+
+    @keyframes loopTypewriter {
+      0% {
+        left: 100%;
+      }
+      50% {
+        left: 0;
+      }
+      100% {
+        left: -100%;
+      }
+    }
+
+    .search-bar {
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      width: 250px;
+    }
+
+    .faq, .menu, .pricing, .footer {
+      margin-left: 230px;
+      padding: 2rem;
+    }
+
+    .accordion {
+      background-color: #eee;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 1rem;
+    }
+
+    .panel {
+      background: #f9f9f9;
+      display: none;
+      padding: 1rem;
+    }
+
+    .pricing .plan {
+      background-color: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px solid #ccc;
+    }
+
+    .footer {
+      background-color: #222;
+      color: white;
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div><strong>BusinessHelper.ro</strong></div>
+  </header>
+
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li>Business Type Categories</li>
+      <li>Document Checklist</li>
+      <li>Useful Tools</li>
+      <li>Quick Links</li>
+      <li>Language Switcher</li>
+      <li>Contact / Help</li>
+    </ul>
+  </div>
+
+  <section class="hero">
+    <h1>Open Your Dream Business</h1>
+    <h2 data-text="Full Documentation. Legal Help. Personal Assistance."></h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Search...">
     </div>
-  );
-}
+  </section>
+
+  <section class="faq">
+    <h2>FAQs</h2>
+    <div class="accordion">How It Works</div>
+    <div class="panel">You choose the business type, we provide all the needed documents step-by-step.</div>
+    <div class="accordion">What Do We Do</div>
+    <div class="panel">We offer full information packages and an optional "We Do It For You" service.</div>
+  </section>
+
+  <section class="menu">
+    <h2>Business Types</h2>
+    <ul>
+      <li>SRL</li>
+      <li>PFA</li>
+      <li>NGO</li>
+    </ul>
+
+    <h2>Romania Counties</h2>
+    <ul>
+      <li>Timisoara</li>
+      <li>Cluj</li>
+      <li>Bucharest</li>
+    </ul>
+
+    <h2>Continents</h2>
+    <ul>
+      <li>Europe</li>
+      <li>Asia</li>
+      <li>America</li>
+    </ul>
+  </section>
+
+  <section class="pricing">
+    <h2>Pricing</h2>
+    <div class="plan">
+      <strong>14.99€</strong> - Full info for all papers
+    </div>
+    <div class="plan">
+      <strong>Contact Us</strong> - Full Info + We Do It For You
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>About Us | Contact | Legal | Terms of Service</p>
+  </footer>
+
+  <script>
+    const acc = document.querySelectorAll(".accordion");
+    acc.forEach(btn => {
+      btn.addEventListener("click", function () {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+    });
+  </script>
+</body>
+
+</html>
