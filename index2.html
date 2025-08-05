@@ -57,21 +57,20 @@
     .hero h1 {
       font-size: 3rem;
     }
-    .hero h2 {
-      font-family: 'Bitcount Grid Single', monospace;
-      font-size: 1.5rem;
-      white-space: nowrap;
+    .hero .subtitle-wrapper {
       overflow: hidden;
+      height: 2rem;
       position: relative;
+      font-family: 'Bitcount Grid Single', monospace;
     }
-    .hero h2::before {
-      content: attr(data-text);
+    .hero .subtitle-text {
       position: absolute;
-      animation: loopTypewriter 10s linear infinite;
+      white-space: nowrap;
+      animation: marqueeLoop 15s linear infinite;
+      font-size: 1.3rem;
     }
-    @keyframes loopTypewriter {
-      0% { left: 100%; }
-      50% { left: 0; }
+    @keyframes marqueeLoop {
+      0%   { left: 100%; }
       100% { left: -100%; }
     }
     .search-bar {
@@ -140,7 +139,9 @@
   </div>
   <section class="hero">
     <h1>Ready Files Romania</h1>
-    <h2 data-text="simple solutions for opening your business - fast, reliable, done for you"></h2>
+    <div class="subtitle-wrapper">
+      <div class="subtitle-text">simple solutions for opening your business - fast, reliable, done for you</div>
+    </div>
     <div class="search-bar">
       <input type="text" placeholder="Search...">
     </div>
