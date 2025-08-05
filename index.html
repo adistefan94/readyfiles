@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ready Files Romania</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
-  <link href="https://fonts.cdnfonts.com/css/bitcount-grid-single" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/bitcount-prop-double" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -27,7 +27,7 @@
     }
     .sidebar {
       width: 220px;
-      background-color: #111;
+      background-color: #2a001a;
       color: white;
       height: 100vh;
       position: fixed;
@@ -61,7 +61,7 @@
       overflow: hidden;
       height: 2rem;
       position: relative;
-      font-family: 'Bitcount Grid Single', monospace;
+      font-family: 'Bitcount Prop Double', monospace;
     }
     .hero .subtitle-text {
       position: absolute;
@@ -86,26 +86,41 @@
       padding: 2rem;
     }
     .accordion {
-      background-color: #eee;
+      background-color: #FFD700;
       margin-bottom: 10px;
       cursor: pointer;
       padding: 1rem;
+      color: black;
+      font-weight: bold;
     }
     .panel {
-      background: #f9f9f9;
+      background: #FFF8DC;
       display: none;
       padding: 1rem;
     }
     .menu ul {
       max-height: 300px;
       overflow-y: scroll;
-      background: #f3f3f3;
+      background: #800080;
       padding: 1rem;
       margin-bottom: 1rem;
-      border-radius: 5px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .menu ul li {
+      background-color: #4B004B;
+      color: white;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .menu ul li:hover {
+      background-color: #600060;
     }
     .pricing .plan {
-      background-color: gold;
+      background-color: #FFD700;
       color: black;
       padding: 2rem;
       margin: 2rem 0;
@@ -113,12 +128,37 @@
       text-align: center;
       font-weight: bold;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .pricing .plan:hover {
+      transform: scale(1.05);
     }
     .footer {
       background-color: #222;
       color: white;
       padding: 2rem;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
+      .hero, .faq, .menu, .pricing, .footer {
+        margin-left: 0;
+        padding: 1rem;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero .subtitle-text {
+        font-size: 1rem;
+      }
+      .search-bar {
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -156,29 +196,29 @@
   <section class="menu">
     <h2>Business Types</h2>
     <ul>
-      <li>SRL</li>
-      <li>PFA</li>
-      <li>NGO</li>
+      <li onclick="alert('SRL section coming soon')">SRL</li>
+      <li onclick="alert('PFA section coming soon')">PFA</li>
+      <li onclick="alert('NGO section coming soon')">NGO</li>
     </ul>
     <h2>Romania Counties</h2>
     <ul>
-      <li>Timisoara</li>
-      <li>Cluj</li>
-      <li>Bucharest</li>
+      <li onclick="alert('Timisoara section coming soon')">Timisoara</li>
+      <li onclick="alert('Cluj section coming soon')">Cluj</li>
+      <li onclick="alert('Bucharest section coming soon')">Bucharest</li>
     </ul>
     <h2>Continents</h2>
     <ul>
-      <li>Europe</li>
-      <li>Asia</li>
-      <li>America</li>
+      <li onclick="alert('Europe expansion coming soon')">Europe</li>
+      <li onclick="alert('Asia expansion coming soon')">Asia</li>
+      <li onclick="alert('America expansion coming soon')">America</li>
     </ul>
   </section>
   <section class="pricing">
     <h2>Pricing</h2>
-    <div class="plan">
+    <div class="plan" onclick="alert('Full info for 14.99€ - Checkout integration coming soon')">
       14.99€ - Full info for all papers
     </div>
-    <div class="plan">
+    <div class="plan" onclick="alert('Contact us for Full Info + We Do It For You - Form coming soon')">
       Contact Us - Full Info + We Do It For You
     </div>
   </section>
