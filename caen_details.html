@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAEN Codes Explorer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7f9;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .section-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+    }
+
+    .section-card h2 {
+      margin-top: 0;
+      color: #2E7D32;
+    }
+
+    .division {
+      margin: 15px 0;
+      padding: 15px;
+      border-left: 4px solid #4CAF50;
+      background: #f9fdf9;
+      border-radius: 8px;
+    }
+
+    .division h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.1rem;
+      color: #388E3C;
+    }
+
+    .class-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .class-list li {
+      background: #E8F5E9;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .class-list li:hover {
+      background: #C8E6C9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #4CAF50;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Clasificare CAEN - Detalii</h1>
+  </header>
+
+  <div class="container" id="caenContainer">
+    <p>Se încarcă datele CAEN...</p>
+  </div>
+
+  <footer>
+    &copy; 2025 Portal CAEN
+  </footer>
+
+  <script>
+    // Include all CAEN data inline for GitHub compatibility
+    const caenData = [
+  {
+    "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
+    "diviziune": "01 Agricultura, vânătoare și servicii anexe",
+    "clase": [
+      {
+        "cod": "0111",
+        "denumire": "Cultivarea cerealelor (exclusiv orez), plantelor leguminoase și a plantelor producătoare de semințe oleaginoase"
+      },
+      {
+        "cod": "0112",
+        "denumire": "Cultivarea orezului"
+      },
+      {
+        "cod": "0113",
+        "denumire": "Cultivarea legumelor și a pepenilor, a rădăcinoaselor și tuberculilor"
+      },
+      {
+        "cod": "0114",
+        "denumire": "Cultivarea trestiei de zahăr"
+      },
+      {
+        "cod": "0115",
+        "denumire": "Cultivarea tutunului"
+      },
+      {
+        "cod": "0116",
+        "denumire": "Cultivarea plantelor pentru fibre textile"
+      },
+      {
+        "cod": "0119",
+        "denumire": "Cultivarea altor plante din culturi nepermanente"
+      }
+    ]
+  },
+  {
+    "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
+    "diviziune": "02 Silvicultură și exploatare forestieră",
+    "clase": [
+      {
+        "cod": "0210",
+        "denumire": "Silvicultură și alte activități forestiere"
+      },
+      {
+        "cod": "0220",
+        "denumire": "Exploatarea forestieră"
+      },
+      {
+        "cod": "0230",
+        "denumire": "Colectarea produselor forestiere nelemnoase din flora spontană"
+      },
+      {
+        "cod": "0240",
+        "denumire": "Activități de servicii anexe silviculturii"
+      }
+    ]
+  },
+  {
+    "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
+    "diviziune": "03 Pescuitul și acvacultura",
+    "clase": [
+      {
+        "cod": "0311",
+        "denumire": "Pescuitul maritim"
+      },
+      {
+        "cod": "0312",
+        "denumire": "Pescuitul în ape dulci"
+      },
+      {
+        "cod": "0321",
+        "denumire": "Acvacultura maritimă"
+      },
+      {
+        "cod": "0322",
+        "denumire": "Acvacultura în ape dulci"
+      }
+    ]
+  },
+  {
+  "sectiune": "B. INDUSTRIA EXTRACTIVĂ",
+  "diviziune": "05 Extracția cărbunelui superior și inferior",
+  "clase": [
+    {"cod": "0510", "denumire": "Extracția cărbunelui superior (hard coal)"},
+    {"cod": "0520", "denumire": "Extracția cărbunelui inferior (lignite)"}
+  ]
+},
+{
+  "sectiune": "B. INDUSTRIA EXTRACTIVĂ",
+  "diviziune": "06 Extracția petrolului brut și a gazelor naturale",
+  "clase": [
+    {"cod": "0610", "denumire": "Extracția petrolului brut"},
+    {"cod": "0620", "denumire": "Extracția gazelor naturale"}
+  ]
+},
+{
+  "sectiune": "B. INDUSTRIA EXTRACTIVĂ",
+  "diviziune": "07 Extracția minereurilor metalifere",
+  "clase": [
+    {"cod": "0710", "denumire": "Extracția minereurilor feroase"},
+    {"cod": "0721", "denumire": "Extracția minereurilor de uraniu și toriu"},
+    {"cod": "0729", "denumire": "Extracția altor minereuri metalifere neferoase"}
+  ]
+},
+{
+  "sectiune": "B. INDUSTRIA EXTRACTIVĂ",
+  "diviziune": "08 Alte activități extractive",
+  "clase": [
+    {"cod": "0811", "denumire": "Extracția pietrei ornamentale și a pietrei pentru construcții, a calcarului, a ghipsului, cretei și ardeziei"},
+    {"cod": "0812", "denumire": "Extracția pietrișului și nisipului; extracția argilei și caolinului"},
+    {"cod": "0891", "denumire": "Extracția mineralelor pentru industria chimică și a îngrășămintelor naturale"},
+    {"cod": "0892", "denumire": "Extracția turbei"},
+    {"cod": "0893", "denumire": "Extracția sării"},
+    {"cod": "0899", "denumire": "Alte activități extractive n.c.a."}
+  ]
+},
+{
+  "sectiune": "B. INDUSTRIA EXTRACTIVĂ",
+  "diviziune": "09 Activități de servicii anexe extracției",
+  "clase": [
+    {"cod": "0910", "denumire": "Activități de servicii anexe extracției petrolului brut și gazelor naturale"},
+    {"cod": "0990", "denumire": "Activități de servicii anexe extracției, altele decât cele pentru petrol și gaze"}
+  ]
+},
+ {
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "10 Industria alimentară",
+  "clase": [
+    {"cod": "1011", "denumire": "Prelucrarea și conservarea cărnii"},
+    {"cod": "1012", "denumire": "Prelucrarea și conservarea cărnii de pasăre"},
+    {"cod": "1013", "denumire": "Fabricarea produselor din carne (inclusiv din carne de pasăre)"},
+    {"cod": "1020", "denumire": "Prelucrarea și conservarea peștelui, crustaceelor și moluștelor"},
+    {"cod": "1031", "denumire": "Prelucrarea și conservarea cartofilor"},
+    {"cod": "1032", "denumire": "Fabricarea sucurilor de fructe și legume"},
+    {"cod": "1039", "denumire": "Prelucrarea și conservarea fructelor și legumelor n.c.a."},
+    {"cod": "1041", "denumire": "Fabricarea uleiurilor și grăsimilor"},
+    {"cod": "1042", "denumire": "Fabricarea margarinei și a altor produse comestibile similare"},
+    {"cod": "1051", "denumire": "Fabricarea produselor lactate și a brânzeturilor"},
+    {"cod": "1052", "denumire": "Fabricarea înghețatei"},
+    {"cod": "1061", "denumire": "Fabricarea produselor de morărit"},
+    {"cod": "1062", "denumire": "Fabricarea amidonului și a produselor din amidon"},
+    {"cod": "1071", "denumire": "Fabricarea pâinii; fabricarea prăjiturilor și a produselor proaspete de patiserie"},
+    {"cod": "1072", "denumire": "Fabricarea biscuiților și pișcoturilor; fabricarea prăjiturilor și a produselor conservate de patiserie"},
+    {"cod": "1073", "denumire": "Fabricarea macaroanelor, tăițeilor, cușcușului și a altor produse făinoase similare"},
+    {"cod": "1081", "denumire": "Fabricarea zahărului"},
+    {"cod": "1082", "denumire": "Fabricarea cacao, a ciocolatei și a produselor zaharoase"},
+    {"cod": "1083", "denumire": "Prelucrarea ceaiului și cafelei"},
+    {"cod": "1084", "denumire": "Fabricarea condimentelor și ingredientelor"},
+    {"cod": "1085", "denumire": "Fabricarea preparatelor alimentare homogene și dietetice"},
+    {"cod": "1086", "denumire": "Fabricarea preparatelor pentru hrana animalelor de companie"},
+    {"cod": "1089", "denumire": "Fabricarea altor produse alimentare n.c.a."},
+    {"cod": "1091", "denumire": "Fabricarea preparatelor pentru hrana animalelor de fermă"},
+    {"cod": "1092", "denumire": "Fabricarea preparatelor pentru hrana animalelor de companie"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "11 Fabricarea băuturilor",
+  "clase": [
+    {"cod": "1101", "denumire": "Distilarea, rafinarea și mixarea băuturilor alcoolice"},
+    {"cod": "1102", "denumire": "Fabricarea vinurilor din struguri"},
+    {"cod": "1103", "denumire": "Fabricarea cidrului și a altor băuturi fermentate din fructe"},
+    {"cod": "1104", "denumire": "Fabricarea altor băuturi nedistilate, obținute prin fermentare"},
+    {"cod": "1105", "denumire": "Fabricarea berii"},
+    {"cod": "1106", "denumire": "Fabricarea malțului"},
+    {"cod": "1107", "denumire": "Fabricarea băuturilor răcoritoare; producția de ape minerale și alte ape îmbuteliate"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "12 Fabricarea produselor din tutun",
+  "clase": [
+    {"cod": "1200", "denumire": "Fabricarea produselor din tutun"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "13 Fabricarea produselor textile",
+  "clase": [
+    {"cod": "1310", "denumire": "Pregătirea fibrelor textile și filarea fibrelor textile"},
+    {"cod": "1320", "denumire": "Țesătoria"},
+    {"cod": "1330", "denumire": "Finisarea materialelor textile"},
+    {"cod": "1391", "denumire": "Fabricarea tricotajelor și croșetajelor"},
+    {"cod": "1392", "denumire": "Fabricarea de articole confecționate din textile (cu excepția îmbrăcămintei)"},
+    {"cod": "1393", "denumire": "Fabricarea covoarelor și a carpetelor"},
+    {"cod": "1394", "denumire": "Fabricarea de frânghii, sfori, plase și articole similare"},
+    {"cod": "1395", "denumire": "Fabricarea nețesutelor și a produselor din acestea, cu excepția îmbrăcămintei"},
+    {"cod": "1396", "denumire": "Fabricarea de articole tehnice și industriale din textile"},
+    {"cod": "1399", "denumire": "Fabricarea altor produse textile n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "14 Fabricarea articolelor de îmbrăcăminte",
+  "clase": [
+    {"cod": "1411", "denumire": "Fabricarea articolelor de îmbrăcăminte din piele"},
+    {"cod": "1412", "denumire": "Fabricarea de articole de îmbrăcăminte pentru lucru"},
+    {"cod": "1413", "denumire": "Fabricarea altor articole de îmbrăcăminte (exclusiv lenjeria de corp)"},
+    {"cod": "1414", "denumire": "Fabricarea de articole de lenjerie de corp"},
+    {"cod": "1419", "denumire": "Fabricarea altor articole de îmbrăcăminte și accesorii n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "15 Fabricarea articolelor din piele și a articolelor similare",
+  "clase": [
+    {"cod": "1511", "denumire": "Fabricarea articolelor din piele pentru încălțăminte"},
+    {"cod": "1512", "denumire": "Fabricarea articolelor din piele, genți, portmonee și articole similare"},
+    {"cod": "1520", "denumire": "Fabricarea încălțămintei (cu excepția celor din piele)"},
+    {"cod": "1531", "denumire": "Fabricarea genților, rucsacurilor și a articolelor similare din materiale textile"},
+    {"cod": "1532", "denumire": "Fabricarea articolelor din piele ecologică și alte materiale similare"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "16 Prelucrarea lemnului și fabricarea produselor din lemn și plută, cu excepția mobilei",
+  "clase": [
+    {"cod": "1610", "denumire": "Tăierea, debitarea și prelucrarea lemnului"},
+    {"cod": "1621", "denumire": "Fabricarea furnirului și a placajului"},
+    {"cod": "1622", "denumire": "Fabricarea ușilor și feroneriei din lemn"},
+    {"cod": "1623", "denumire": "Fabricarea altor produse din lemn, plută, paie și materiale împletite"},
+    {"cod": "1624", "denumire": "Fabricarea articolelor din plută și materiale similare"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "17 Fabricarea hârtiei și a cartonului",
+  "clase": [
+    {"cod": "1701", "denumire": "Fabricarea hârtiei și a cartonului"},
+    {"cod": "1702", "denumire": "Fabricarea articolelor din hârtie și carton pentru uz casnic, birou și industrial"},
+    {"cod": "1709", "denumire": "Fabricarea altor produse din hârtie și carton n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "18 Tipărirea și reproducerea pe suporturi tipărite",
+  "clase": [
+    {"cod": "1811", "denumire": "Tipărirea pe suporturi tipărite de ziare"},
+    {"cod": "1812", "denumire": "Tipărirea pe suporturi tipărite de carte, broșuri și alte produse similare"},
+    {"cod": "1813", "denumire": "Tipărirea pe suporturi tipărite de etichete și ambalaje"},
+    {"cod": "1814", "denumire": "Reproducerea pe suporturi tipărite n.c.a."},
+    {"cod": "1820", "denumire": "Reproducerea înregistrărilor pe suporturi audio, video și software"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "19 Fabricarea produselor din cocserie și rafinarea țițeiului",
+  "clase": [
+    {"cod": "1910", "denumire": "Fabricarea produselor din cocserie"},
+    {"cod": "1920", "denumire": "Rafinarea țițeiului"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "20 Fabricarea produselor chimice",
+  "clase": [
+    {"cod": "2011", "denumire": "Fabricarea gazelor industriale"},
+    {"cod": "2012", "denumire": "Fabricarea coloranților și a pigmenților"},
+    {"cod": "2013", "denumire": "Fabricarea altor produse chimice anorganice de bază"},
+    {"cod": "2014", "denumire": "Fabricarea altor produse chimice organice de bază"},
+    {"cod": "2015", "denumire": "Fabricarea îngrășămintelor și a azotatului de amoniu"},
+    {"cod": "2016", "denumire": "Fabricarea pesticidelor și a altor produse chimice pentru agricultură"},
+    {"cod": "2017", "denumire": "Fabricarea adezivilor și a altor produse chimice speciale"},
+    {"cod": "2020", "denumire": "Fabricarea produse de curățenie, detergenți și produse de igienă"},
+    {"cod": "2030", "denumire": "Fabricarea parfumurilor și a produselor cosmetice"},
+    {"cod": "2041", "denumire": "Fabricarea medicamentelor pentru uz uman"},
+    {"cod": "2042", "denumire": "Fabricarea medicamentelor pentru uz veterinar"},
+    {"cod": "2051", "denumire": "Fabricarea săpunurilor și a detergenților"},
+    {"cod": "2052", "denumire": "Fabricarea parfumurilor și a produselor cosmetice"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "21 Fabricarea produselor farmaceutice și preparatelor botanice",
+  "clase": [
+    {"cod": "2100", "denumire": "Fabricarea produselor farmaceutice de bază și a preparatelor farmaceutice"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "22 Fabricarea produselor din cauciuc și mase plastice",
+  "clase": [
+    {"cod": "2211", "denumire": "Fabricarea produselor din cauciuc"},
+    {"cod": "2212", "denumire": "Fabricarea articolelor din mase plastice"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "23 Fabricarea produselor din minerale nemetalice",
+  "clase": [
+    {"cod": "2311", "denumire": "Fabricarea sticlei și a produselor din sticlă"},
+    {"cod": "2312", "denumire": "Fabricarea articolelor din ceramică și cărămizi"},
+    {"cod": "2313", "denumire": "Fabricarea cimentului, varului și ipsosului"},
+    {"cod": "2314", "denumire": "Fabricarea altor produse din minerale nemetalice n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "24 Metalurgia",
+  "clase": [
+    {"cod": "2410", "denumire": "Prelucrarea fierului și a oțelului; producția de metale feroase"},
+    {"cod": "2420", "denumire": "Prelucrarea metalelor neferoase"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "25 Fabricarea produselor metalice, cu excepția mașinilor și echipamentelor",
+  "clase": [
+    {"cod": "2511", "denumire": "Fabricarea structurii metalice și a părților componente ale structurilor metalice"},
+    {"cod": "2512", "denumire": "Fabricarea rezervoarelor, bazine și recipiente metalice"},
+    {"cod": "2513", "denumire": "Fabricarea cutiilor, containere și alte recipiente metalice"},
+    {"cod": "2520", "denumire": "Fabricarea radiatoarelor și a centralei termice metalice"},
+    {"cod": "2591", "denumire": "Fabricarea articolelor din metal pentru uz casnic și industrial"},
+    {"cod": "2599", "denumire": "Fabricarea altor produse metalice n.c.a."}
+  ]
+},
+ {
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "26 Fabricarea calculatoarelor, echipamentului electronic și optic",
+  "clase": [
+    {"cod": "2611", "denumire": "Fabricarea componentelor electronice"},
+    {"cod": "2612", "denumire": "Fabricarea calculatoarelor și a echipamentului periferic"},
+    {"cod": "2620", "denumire": "Fabricarea echipamentului de comunicații"},
+    {"cod": "2630", "denumire": "Fabricarea echipamentului pentru radio și televiziune"},
+    {"cod": "2640", "denumire": "Fabricarea echipamentului optic și foto"},
+    {"cod": "2651", "denumire": "Fabricarea ceasurilor și instrumentelor de măsură"},
+    {"cod": "2660", "denumire": "Fabricarea calculatoarelor și echipamentului de automatizare"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "27 Fabricarea echipamentului electric",
+  "clase": [
+    {"cod": "2711", "denumire": "Fabricarea motoarelor, generatoarelor și transformatoarelor electrice"},
+    {"cod": "2720", "denumire": "Fabricarea cablurilor și a aparatajului electric"},
+    {"cod": "2731", "denumire": "Fabricarea echipamentului de distribuție și control electric"},
+    {"cod": "2732", "denumire": "Fabricarea echipamentului pentru iluminat electric"},
+    {"cod": "2740", "denumire": "Fabricarea echipamentului electric de semnalizare și protecție"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "28 Fabricarea mașinilor și echipamentelor n.c.a.",
+  "clase": [
+    {"cod": "2811", "denumire": "Fabricarea mașinilor pentru industria extractivă și construcții"},
+    {"cod": "2812", "denumire": "Fabricarea mașinilor pentru industria materialelor textile"},
+    {"cod": "2813", "denumire": "Fabricarea mașinilor pentru industria alimentară"},
+    {"cod": "2814", "denumire": "Fabricarea mașinilor pentru industria hârtiei și celulozei"},
+    {"cod": "2815", "denumire": "Fabricarea altor mașini pentru industrie n.c.a."},
+    {"cod": "2821", "denumire": "Fabricarea mașinilor de uz general"},
+    {"cod": "2822", "denumire": "Fabricarea mașinilor pentru uz industrial"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "29 Fabricarea autovehiculelor și a altor mijloace de transport",
+  "clase": [
+    {"cod": "2910", "denumire": "Fabricarea autovehiculelor"},
+    {"cod": "2920", "denumire": "Fabricarea remorcilor și semiremorcilor"},
+    {"cod": "2931", "denumire": "Fabricarea aeronavelor și a echipamentului spațial"},
+    {"cod": "2932", "denumire": "Fabricarea vapoarelor și a navelor de agrement"},
+    {"cod": "3091", "denumire": "Fabricarea motocicletelor"},
+    {"cod": "3092", "denumire": "Fabricarea bicicletelor și a vehiculelor pentru persoane cu mobilitate redusă"},
+    {"cod": "3099", "denumire": "Fabricarea altor mijloace de transport n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "30 Fabricarea mobilei",
+  "clase": [
+    {"cod": "3101", "denumire": "Fabricarea mobilei pentru locuințe"},
+    {"cod": "3102", "denumire": "Fabricarea mobilei pentru birouri și spații comerciale"},
+    {"cod": "3103", "denumire": "Fabricarea altor tipuri de mobilă n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "31 Alte industrii manufacturiere",
+  "clase": [
+    {"cod": "3211", "denumire": "Fabricarea bijuteriilor și articolelor de argintărie"},
+    {"cod": "3212", "denumire": "Fabricarea instrumentelor muzicale"},
+    {"cod": "3213", "denumire": "Fabricarea articolelor sportive"},
+    {"cod": "3214", "denumire": "Fabricarea jucăriilor și jocurilor"},
+    {"cod": "3219", "denumire": "Fabricarea altor produse manufacturiere n.c.a."}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "32 Repararea și instalarea mașinilor și echipamentelor",
+  "clase": [
+    {"cod": "3311", "denumire": "Repararea utilajelor industriale"},
+    {"cod": "3312", "denumire": "Repararea echipamentului electric și electronic"},
+    {"cod": "3313", "denumire": "Repararea echipamentului de transport"},
+    {"cod": "3314", "denumire": "Repararea altor echipamente n.c.a."},
+    {"cod": "3320", "denumire": "Instalarea mașinilor și echipamentelor industriale"}
+  ]
+},
+{
+  "sectiune": "C. INDUSTRIA PRELUCRĂTOARE",
+  "diviziune": "33 Repararea și instalarea echipamentelor",
+  "clase": [
+    {"cod": "3311", "denumire": "Repararea și întreținerea echipamentelor industriale și de transport"},
+    {"cod": "3320", "denumire": "Instalarea echipamentelor industriale și comerciale"}
+  ]
+},
+ {
+  "sectiune": "D. PRODUCȚIA ȘI FURNIZAREA DE ENERGIE",
+  "diviziune": "35 Producția și furnizarea de energie electrică și termică, gaze, apă caldă și aer condiționat",
+  "clase": [
+    {"cod": "3511", "denumire": "Producerea, transportul și distribuția energiei electrice"},
+    {"cod": "3512", "denumire": "Producerea, transportul și distribuția gazelor naturale prin conducte"},
+    {"cod": "3513", "denumire": "Furnizarea de energie termică"},
+    {"cod": "3514", "denumire": "Furnizarea de apă caldă și aer condiționat pentru clădiri"}
+  ]
+},
+ {
+  "sectiune": "E. APA; SALUBRITATE, GESTIONAREA DEȘEURILOR ȘI ACTIVITĂȚI DE REMEDIERE",
+  "diviziune": "36 Captarea, tratarea și distribuția apei",
+  "clase": [
+    {"cod": "3600", "denumire": "Captarea, tratarea și distribuția apei"}
+  ]
+},
+{
+  "sectiune": "E. APA; SALUBRITATE, GESTIONAREA DEȘEURILOR ȘI ACTIVITĂȚI DE REMEDIERE",
+  "diviziune": "37 Colectarea și epurarea apelor uzate",
+  "clase": [
+    {"cod": "3700", "denumire": "Colectarea și epurarea apelor uzate"}
+  ]
+},
+{
+  "sectiune": "E. APA; SALUBRITATE, GESTIONAREA DEȘEURILOR ȘI ACTIVITĂȚI DE REMEDIERE",
+  "diviziune": "38 Activități de salubritate, gestionarea deșeurilor și activități de remediere",
+  "clase": [
+    {"cod": "3811", "denumire": "Colectarea deșeurilor nepericuloase"},
+    {"cod": "3812", "denumire": "Colectarea deșeurilor periculoase"},
+    {"cod": "3821", "denumire": "Tratarea și eliminarea deșeurilor nepericuloase"},
+    {"cod": "3822", "denumire": "Tratarea și eliminarea deșeurilor periculoase"},
+    {"cod": "3830", "denumire": "Recuperarea materialelor reciclabile"},
+    {"cod": "3900", "denumire": "Activități de remediere și alte activități de gestionare a deșeurilor n.c.a."}
+  ]
+},
+ {
+  "sectiune": "F. CONSTRUCȚII",
+  "diviziune": "41 Construcția clădirilor",
+  "clase": [
+    {"cod": "4110", "denumire": "Construcția clădirilor rezidențiale și nerezidențiale"}
+  ]
+},
+{
+  "sectiune": "F. CONSTRUCȚII",
+  "diviziune": "42 Lucrări de inginerie civilă",
+  "clase": [
+    {"cod": "4211", "denumire": "Lucrări de drumuri și autostrăzi"},
+    {"cod": "4212", "denumire": "Lucrări de poduri și tuneluri"},
+    {"cod": "4291", "denumire": "Lucrări de rețele de apă, canalizare, electrice și telecomunicații"},
+    {"cod": "4299", "denumire": "Alte lucrări de inginerie civilă n.c.a."}
+  ]
+},
+{
+  "sectiune": "F. CONSTRUCȚII",
+  "diviziune": "43 Lucrări de construcții specializate",
+  "clase": [
+    {"cod": "4311", "denumire": "Lucrări de demolare și pregătirea terenului pentru construcții"},
+    {"cod": "4312", "denumire": "Lucrări de instalații electrice"},
+    {"cod": "4321", "denumire": "Lucrări de instalații sanitare, de încălzire și aer condiționat"},
+    {"cod": "4322", "denumire": "Lucrări de izolare termică, fonică și hidroizolații"},
+    {"cod": "4329", "denumire": "Alte lucrări de instalații specializate n.c.a."},
+    {"cod": "4331", "denumire": "Lucrări de finisare a clădirilor"},
+    {"cod": "4332", "denumire": "Montarea tâmplăriei pentru clădiri"},
+    {"cod": "4339", "denumire": "Alte lucrări de construcții specializate n.c.a."}
+  ]
+},
+ {
+  "sectiune": "G. COMERȚ; REPARAREA AUTOVEHICULELOR ȘI MOTOCICLETELOR",
+  "diviziune": "45 Comerțul și repararea autovehiculelor și motocicletelor",
+  "clase": [
+    {"cod": "4511", "denumire": "Comerț cu autovehicule"},
+    {"cod": "4520", "denumire": "Întreținerea și repararea autovehiculelor"},
+    {"cod": "4530", "denumire": "Comerțul și repararea motocicletelor și a părților componente"}
+  ]
+},
+{
+  "sectiune": "G. COMERȚ; REPARAREA AUTOVEHICULELOR ȘI MOTOCICLETELOR",
+  "diviziune": "46 Comerț cu ridicata, cu excepția comerțului cu autovehicule și motociclete",
+  "clase": [
+    {"cod": "4611", "denumire": "Intermedierea în comerțul cu produse agroalimentare"},
+    {"cod": "4612", "denumire": "Intermedierea în comerțul cu materii prime textile"},
+    {"cod": "4613", "denumire": "Intermedierea în comerțul cu combustibili, minereuri, metale"},
+    {"cod": "4614", "denumire": "Intermedierea în comerțul cu produse chimice"},
+    {"cod": "4615", "denumire": "Intermedierea în comerțul cu mașini, echipamente și furnituri"},
+    {"cod": "4616", "denumire": "Intermedierea în comerțul cu produse diverse"},
+    {"cod": "4621", "denumire": "Comerț cu ridicata de cereale, semințe și furaje pentru animale"},
+    {"cod": "4622", "denumire": "Comerț cu ridicata de produse alimentare, băuturi și tutun"},
+    {"cod": "4631", "denumire": "Comerț cu ridicata de textile, îmbrăcăminte și încălțăminte"},
+    {"cod": "4632", "denumire": "Comerț cu ridicata de aparate electronice și echipamente IT"},
+    {"cod": "4633", "denumire": "Comerț cu ridicata de mobilă, articole de iluminat și alte bunuri de uz casnic"},
+    {"cod": "4641", "denumire": "Comerț cu ridicata de combustibili solizi, lichizi și gazoși"},
+    {"cod": "4642", "denumire": "Comerț cu ridicata de produse farmaceutice și cosmetice"},
+    {"cod": "4643", "denumire": "Comerț cu ridicata de bunuri industriale n.c.a."},
+    {"cod": "4651", "denumire": "Comerț cu ridicata de cereale, semințe și furaje pentru animale"},
+    {"cod": "4652", "denumire": "Comerț cu ridicata de materiale textile și îmbrăcăminte"},
+    {"cod": "4653", "denumire": "Comerț cu ridicata de echipamente tehnologice și industriale"}
+  ]
+},
+{
+  "sectiune": "G. COMERȚ; REPARAREA AUTOVEHICULELOR ȘI MOTOCICLETELOR",
+  "diviziune": "47 Comerț cu amănuntul, cu excepția comerțului cu autovehicule și motociclete",
+  "clase": [
+    {"cod": "4711", "denumire": "Comerț cu amănuntul în magazine nespecializate"},
+    {"cod": "4712", "denumire": "Comerț cu amănuntul în magazine specializate cu produse alimentare, băuturi și tutun"},
+    {"cod": "4721", "denumire": "Comerț cu amănuntul cu produse nealimentare, în magazine specializate"},
+    {"cod": "4722", "denumire": "Comerț cu amănuntul cu echipamente IT și electronice"},
+    {"cod": "4723", "denumire": "Comerț cu amănuntul cu textile, îmbrăcăminte și încălțăminte"},
+    {"cod": "4724", "denumire": "Comerț cu amănuntul cu mobilier, articole de iluminat și alte bunuri de uz casnic"},
+    {"cod": "4725", "denumire": "Comerț cu amănuntul de combustibili și produse pentru încălzire"},
+    {"cod": "4726", "denumire": "Comerț cu amănuntul de produse farmaceutice, cosmetice și igienă personală"},
+    {"cod": "4729", "denumire": "Alte forme de comerț cu amănuntul în magazine specializate"},
+    {"cod": "4730", "denumire": "Comerț cu amănuntul prin intermediul piețelor și târgurilor"},
+    {"cod": "4740", "denumire": "Comerț cu amănuntul prin intermediul vending-urilor și automatelor"},
+    {"cod": "4791", "denumire": "Comerț cu amănuntul prin intermediul magazinelor online"},
+    {"cod": "4799", "denumire": "Alte forme de comerț cu amănuntul n.c.a."}
+  ]
+},
+ {
+  "sectiune": "H. TRANSPORT ȘI DEPOZITARE",
+  "diviziune": "49 Transport terestru și transport prin conducte",
+  "clase": [
+    {"cod": "4911", "denumire": "Transportul feroviar de călători"},
+    {"cod": "4912", "denumire": "Transportul feroviar de marfă"},
+    {"cod": "4920", "denumire": "Transporturi prin conducte"},
+    {"cod": "4931", "denumire": "Transport rutier de călători"},
+    {"cod": "4932", "denumire": "Transport rutier de marfă"}
+  ]
+},
+{
+  "sectiune": "H. TRANSPORT ȘI DEPOZITARE",
+  "diviziune": "50 Transporturi pe apă",
+  "clase": [
+    {"cod": "5010", "denumire": "Transport maritim și fluvial de călători"},
+    {"cod": "5020", "denumire": "Transport maritim și fluvial de marfă"}
+  ]
+},
+{
+  "sectiune": "H. TRANSPORT ȘI DEPOZITARE",
+  "diviziune": "51 Transporturi aeriene",
+  "clase": [
+    {"cod": "5110", "denumire": "Transport aerian de pasageri"},
+    {"cod": "5121", "denumire": "Transport aerian de marfă"},
+    {"cod": "5122", "denumire": "Activități de servicii auxiliare pentru transport aerian"}
+  ]
+},
+{
+  "sectiune": "H. TRANSPORT ȘI DEPOZITARE",
+  "diviziune": "52 Depozitare și activități auxiliare pentru transport",
+  "clase": [
+    {"cod": "5210", "denumire": "Depozitare și păstrare"},
+    {"cod": "5221", "denumire": "Activități auxiliare pentru transporturi terestre"},
+    {"cod": "5222", "denumire": "Activități auxiliare pentru transporturi pe apă"},
+    {"cod": "5223", "denumire": "Activități auxiliare pentru transporturi aeriene"},
+    {"cod": "5224", "denumire": "Activități de manipulare a mărfurilor și logistică"},
+    {"cod": "5229", "denumire": "Alte activități auxiliare pentru transporturi n.c.a."}
+  ]
+},
+{
+  "sectiune": "H. TRANSPORT ȘI DEPOZITARE",
+  "diviziune": "53 Servicii poștale și de curier",
+  "clase": [
+    {"cod": "5310", "denumire": "Servicii poștale"},
+    {"cod": "5320", "denumire": "Servicii de curier"}
+  ]
+},
+ {
+  "sectiune": "I. HOTELURI ȘI RESTAURANTE",
+  "diviziune": "55 Hoteluri și alte facilități de cazare",
+  "clase": [
+    {"cod": "5510", "denumire": "Hoteluri și facilități similare"},
+    {"cod": "5520", "denumire": "Campinguri, parcări pentru rulote și facilități similare"},
+    {"cod": "5530", "denumire": "Parcuri pentru vacanță și alte facilități de cazare pe termen scurt"}
+  ]
+},
+{
+  "sectiune": "I. HOTELURI ȘI RESTAURANTE",
+  "diviziune": "56 Restaurante și alte servicii de alimentație",
+  "clase": [
+    {"cod": "5610", "denumire": "Restaurante și servicii mobile de alimentație"},
+    {"cod": "5621", "denumire": "Activități de alimentație cu preparate pentru acasă (take-away)"},
+    {"cod": "5629", "denumire": "Alte servicii de alimentație n.c.a."}
+  ]
+},
+ {
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "58 Editarea de software, publicații și suporturi digitale",
+  "clase": [
+    {"cod": "5811", "denumire": "Editarea de cărți"},
+    {"cod": "5812", "denumire": "Editarea de publicații periodice"},
+    {"cod": "5813", "denumire": "Editarea de software"}
+  ]
+},
+{
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "59 Activități de producție film, înregistrări video și programe TV",
+  "clase": [
+    {"cod": "5911", "denumire": "Producția de filme și video"},
+    {"cod": "5912", "denumire": "Producția de programe TV"},
+    {"cod": "5920", "denumire": "Activități de post-producție și distribuție"}
+  ]
+},
+{
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "60 Activități de telecomunicații",
+  "clase": [
+    {"cod": "6010", "denumire": "Activități de telecomunicații prin rețele de fibră optică, cablu și alte tehnologii"},
+    {"cod": "6020", "denumire": "Activități de telecomunicații prin satelit"},
+    {"cod": "6030", "denumire": "Activități de telecomunicații prin alte rețele"}
+  ]
+},
+{
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "61 Activități de servicii IT și consultanță",
+  "clase": [
+    {"cod": "6110", "denumire": "Activități de consultanță în tehnologia informației"},
+    {"cod": "6120", "denumire": "Activități de gestionare a infrastructurii IT"},
+    {"cod": "6190", "denumire": "Alte activități de servicii IT n.c.a."}
+  ]
+},
+{
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "62 Activități de servicii informatice",
+  "clase": [
+    {"cod": "6201", "denumire": "Activități de realizare a software-ului la comandă"},
+    {"cod": "6202", "denumire": "Activități de consultanță și management IT"},
+    {"cod": "6203", "denumire": "Gestionarea și administrarea bazelor de date"},
+    {"cod": "6209", "denumire": "Alte activități de servicii informatice n.c.a."}
+  ]
+},
+{
+  "sectiune": "J. INFORMAȚII ȘI COMUNICAȚII",
+  "diviziune": "63 Activități de servicii informaționale",
+  "clase": [
+    {"cod": "6311", "denumire": "Prelucrarea datelor și servicii conexe"},
+    {"cod": "6312", "denumire": "Portale web și servicii online"},
+    {"cod": "6391", "denumire": "Activități de biblioteci și arhive digitale"},
+    {"cod": "6399", "denumire": "Alte activități de servicii informaționale n.c.a."}
+  ]
+},
+ {
+  "sectiune": "K. ACTIVITĂȚI FINANCIARE ȘI DE ASIGURĂRI",
+  "diviziune": "64 Activități de servicii financiare, cu excepția asigurărilor și fondurilor de pensii",
+  "clase": [
+    {"cod": "6411", "denumire": "Bănci centrale"},
+    {"cod": "6419", "denumire": "Alte activități financiare, cu excepția băncilor"},
+    {"cod": "6420", "denumire": "Bănci și instituții de credit"},
+    {"cod": "6430", "denumire": "Fonduri de investiții și alte activități de management al investițiilor"},
+    {"cod": "6491", "denumire": "Leasing financiar"},
+    {"cod": "6492", "denumire": "Credit ipotecar"},
+    {"cod": "6499", "denumire": "Alte activități financiare n.c.a."}
+  ]
+},
+{
+  "sectiune": "K. ACTIVITĂȚI FINANCIARE ȘI DE ASIGURĂRI",
+  "diviziune": "65 Activități de asigurări și fonduri de pensii, cu excepția asigurărilor sociale obligatorii",
+  "clase": [
+    {"cod": "6511", "denumire": "Asigurări generale"},
+    {"cod": "6512", "denumire": "Asigurări de viață"},
+    {"cod": "6520", "denumire": "Fonduri de pensii private"},
+    {"cod": "6530", "denumire": "Activități de reasigurare"},
+    {"cod": "6591", "denumire": "Activități auxiliare de asigurări și fonduri de pensii"},
+    {"cod": "6592", "denumire": "Activități de consultanță în domeniul asigurărilor"}
+  ]
+},
+{
+  "sectiune": "K. ACTIVITĂȚI FINANCIARE ȘI DE ASIGURĂRI",
+  "diviziune": "66 Activități de servicii auxiliare pentru servicii financiare și de asigurări",
+  "clase": [
+    {"cod": "6611", "denumire": "Administrarea piețelor financiare"},
+    {"cod": "6612", "denumire": "Activități de brokeraj financiar"},
+    {"cod": "6619", "denumire": "Alte activități auxiliare pentru servicii financiare n.c.a."}
+  ]
+},
+ {
+  "sectiune": "L. ADMINISTRAȚIE PUBLICĂ ȘI APĂRARE; ASIGURĂRI SOCIALE",
+  "diviziune": "84 Administrație publică și apărare; asigurări sociale",
+  "clase": [
+    {"cod": "8411", "denumire": "Administrație publică generală"},
+    {"cod": "8412", "denumire": "Apărare națională"},
+    {"cod": "8413", "denumire": "Ordine publică și siguranță națională"},
+    {"cod": "8421", "denumire": "Asigurări sociale obligatorii"},
+    {"cod": "8422", "denumire": "Asigurări sociale voluntare"},
+    {"cod": "8430", "denumire": "Asistență socială fără cazare"},
+    {"cod": "8440", "denumire": "Asistență socială cu cazare"}
+  ]
+},
+ {
+  "sectiune": "M. ACTIVITĂȚI DE SĂNĂTATE ȘI ASISTENȚĂ SOCIALĂ",
+  "diviziune": "86 Activități de sănătate și asistență socială",
+  "clase": [
+    {"cod": "8610", "denumire": "Activități spitalicești"},
+    {"cod": "8620", "denumire": "Activități ale medicilor și stomatologilor"},
+    {"cod": "8690", "denumire": "Alte activități de sănătate n.c.a."},
+    {"cod": "8710", "denumire": "Activități de asistență medicală cu cazare"},
+    {"cod": "8720", "denumire": "Activități de asistență socială fără cazare pentru persoane cu dizabilități"},
+    {"cod": "8730", "denumire": "Activități de asistență socială fără cazare pentru vârstnici și alte persoane"},
+    {"cod": "8790", "denumire": "Alte activități de asistență socială n.c.a."}
+  ]
+},
+ {
+  "sectiune": "N. ACTIVITĂȚI DE ÎNVĂȚĂMÂNT",
+  "diviziune": "85 Activități de învățământ",
+  "clase": [
+    {"cod": "8510", "denumire": "Învățământ preșcolar"},
+    {"cod": "8520", "denumire": "Învățământ primar și secundar"},
+    {"cod": "8531", "denumire": "Învățământ profesional și tehnic"},
+    {"cod": "8532", "denumire": "Învățământ liceal și postliceal"},
+    {"cod": "8541", "denumire": "Învățământ universitar"},
+    {"cod": "8542", "denumire": "Învățământ postuniversitar și formare continuă"},
+    {"cod": "8551", "denumire": "Activități de instruire sportivă și recreativă"},
+    {"cod": "8552", "denumire": "Activități de instruire artistică și culturală"},
+    {"cod": "8560", "denumire": "Activități de instruire pentru alte domenii n.c.a."}
+  ]
+},
+ {
+  "sectiune": "O. ACTIVITĂȚI DE SERVICII SOCIALE ȘI DE PROTECȚIE A COPILULUI",
+  "diviziune": "88 Activități de asistență socială cu cazare și fără cazare",
+  "clase": [
+    {"cod": "8810", "denumire": "Servicii de asistență socială cu cazare pentru persoane cu dizabilități"},
+    {"cod": "8820", "denumire": "Servicii de asistență socială cu cazare pentru vârstnici"},
+    {"cod": "8891", "denumire": "Servicii de protecție a copilului cu cazare"},
+    {"cod": "8892", "denumire": "Servicii de protecție a copilului fără cazare"},
+    {"cod": "8899", "denumire": "Alte activități de asistență socială fără cazare n.c.a."}
+  ]
+},
+ {
+  "sectiune": "P. ACTIVITĂȚI DE SERVICII PENTRU GOSPODĂRII ȘI UZ PERSONAL",
+  "diviziune": "95 Repararea calculatoarelor și a bunurilor personale și casnice",
+  "clase": [
+    {"cod": "9511", "denumire": "Repararea calculatoarelor și echipamentelor periferice"},
+    {"cod": "9521", "denumire": "Repararea electrocasnicelor și a altor bunuri de uz casnic"},
+    {"cod": "9522", "denumire": "Repararea articolelor de uz personal și a bunurilor personale"}
+  ]
+},
+{
+  "sectiune": "P. ACTIVITĂȚI DE SERVICII PENTRU GOSPODĂRII ȘI UZ PERSONAL",
+  "diviziune": "96 Alte activități de servicii pentru gospodării și uz personal",
+  "clase": [
+    {"cod": "9601", "denumire": "Spălătoria și curățătoria hainelor"},
+    {"cod": "9602", "denumire": "Coafură și alte activități de înfrumusețare"},
+    {"cod": "9603", "denumire": "Servicii funerare și de îmbălsămare"},
+    {"cod": "9604", "denumire": "Alte activități de servicii pentru gospodării și uz personal n.c.a."}
+  ]
+},
+ {
+  "sectiune": "Q. ACTIVITĂȚI DE ORGANIZAȚII ȘI ORGANISME INTERNAȚIONALE",
+  "diviziune": "94 Activități ale organizațiilor asociative",
+  "clase": [
+    {"cod": "9411", "denumire": "Activități ale organizațiilor patronale"},
+    {"cod": "9412", "denumire": "Activități ale organizațiilor sindicale"},
+    {"cod": "9491", "denumire": "Activități ale organizațiilor religioase"},
+    {"cod": "9492", "denumire": "Activități ale organizațiilor profesionale"},
+    {"cod": "9499", "denumire": "Alte activități ale organizațiilor asociative n.c.a."}
+  ]
+},
+ {
+  "sectiune": "R. ACTIVITĂȚI DE SPECTACOLE, CULTURALE ȘI RECREATIVE",
+  "diviziune": "90 Activități artistice și recreative",
+  "clase": [
+    {"cod": "9001", "denumire": "Activități de interpretare artistică"},
+    {"cod": "9002", "denumire": "Activități de suport pentru activitățile artistice"},
+    {"cod": "9003", "denumire": "Activități de creație artistică"},
+    {"cod": "9004", "denumire": "Activități ale sălilor de spectacol"}
+  ]
+},
+{
+  "sectiune": "R. ACTIVITĂȚI DE SPECTACOLE, CULTURALE ȘI RECREATIVE",
+  "diviziune": "91 Activități de biblioteci, arhive, muzee și alte activități culturale",
+  "clase": [
+    {"cod": "9101", "denumire": "Activități ale bibliotecilor și arhivelor"},
+    {"cod": "9102", "denumire": "Activități ale muzeelor"},
+    {"cod": "9103", "denumire": "Activități de grădini zoologice și botanice și parcuri de atracții"}
+  ]
+},
+{
+  "sectiune": "R. ACTIVITĂȚI DE SPECTACOLE, CULTURALE ȘI RECREATIVE",
+  "diviziune": "92 Activități de jocuri de noroc și pariuri",
+  "clase": [
+    {"cod": "9200", "denumire": "Activități de jocuri de noroc și pariuri"}
+  ]
+},
+{
+  "sectiune": "R. ACTIVITĂȚI DE SPECTACOLE, CULTURALE ȘI RECREATIVE",
+  "diviziune": "93 Activități sportive, de agrement și recreative",
+  "clase": [
+    {"cod": "9311", "denumire": "Activități ale cluburilor sportive"},
+    {"cod": "9312", "denumire": "Activități ale centrelor de fitness"},
+    {"cod": "9321", "denumire": "Activități ale parcurilor de distracții și tematice"},
+    {"cod": "9329", "denumire": "Alte activități recreative și de agrement n.c.a."}
+  ]
+},
+{
+  "sectiune": "S. ALTE ACTIVITĂȚI DE SERVICII",
+  "diviziune": "93 Activități de sport, divertisment și recreere",
+  "clase": [
+    {"cod": "9311", "denumire": "Activități ale centrelor sportive"},
+    {"cod": "9312", "denumire": "Activități ale cluburilor sportive"},
+    {"cod": "9321", "denumire": "Parcuri de distracții și de agrement"},
+    {"cod": "9329", "denumire": "Alte activități de recreere și divertisment n.c.a."}
+  ]
+}
+,
+{
+  "sectiune": "S. ALTE ACTIVITĂȚI DE SERVICII",
+  "diviziune": "94 Activități ale organizațiilor și organismelor internaționale",
+  "clase": [
+    {"cod": "9411", "denumire": "Activități ale organizațiilor patronale și sindicale"},
+    {"cod": "9491", "denumire": "Activități ale organizațiilor religioase"},
+    {"cod": "9492", "denumire": "Activități ale organizațiilor profesionale"},
+    {"cod": "9499", "denumire": "Alte activități ale organizațiilor n.c.a."}
+  ]
+},
+{
+  "sectiune": "S. ALTE ACTIVITĂȚI DE SERVICII",
+  "diviziune": "95 Repararea calculatoarelor și a bunurilor personale și casnice",
+  "clase": [
+    {"cod": "9511", "denumire": "Repararea calculatoarelor și a echipamentelor periferice"},
+    {"cod": "9521", "denumire": "Repararea electrocasnicelor de uz casnic"},
+    {"cod": "9522", "denumire": "Repararea articolelor de uz personal și a bunurilor personale"}
+  ]
+},
+{
+  "sectiune": "S. ALTE ACTIVITĂȚI DE SERVICII",
+  "diviziune": "96 Alte activități de servicii pentru gospodării și uz personal",
+  "clase": [
+    {"cod": "9601", "denumire": "Spălătoria și curățătoria hainelor"},
+    {"cod": "9602", "denumire": "Coafură și alte activități de înfrumusețare"},
+    {"cod": "9603", "denumire": "Servicii funerare și de îmbălsămare"},
+    {"cod": "9604", "denumire": "Alte activități de servicii pentru gospodării și uz personal n.c.a."}
+  ]
+}
+]
+
+
+    const container = document.getElementById("caenContainer");
+    container.innerHTML = "";
+
+    caenData.forEach(section => {
+      const sectionCard = document.createElement("div");
+      sectionCard.className = "section-card";
+
+      const sectionTitle = document.createElement("h2");
+      sectionTitle.textContent = section.sectiune;
+      sectionCard.appendChild(sectionTitle);
+
+      const division = document.createElement("div");
+      division.className = "division";
+
+      const divisionTitle = document.createElement("h3");
+      divisionTitle.textContent = section.diviziune;
+      division.appendChild(divisionTitle);
+
+      const ul = document.createElement("ul");
+      ul.className = "class-list";
+
+      section.clase.forEach(clasa => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
+        ul.appendChild(li);
+      });
+
+      division.appendChild(ul);
+      sectionCard.appendChild(division);
+      container.appendChild(sectionCard);
+    });
+  </script>
+</body>
+</html>
