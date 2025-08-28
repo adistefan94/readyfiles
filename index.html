@@ -141,8 +141,7 @@
         localStorage.setItem('selectedIndustry', value);
         if(subValue){
           localStorage.setItem('selectedForm', subValue);
-          alert('Industry: ' + value + " | Form: " + subValue);
-          // TODO: redirect to details page later
+          window.location.href = "details.html";
         }
       }
     }
