@@ -3,168 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ready Files Romania</title>
+  <title>Done Files Romania</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
-  <link href="https://fonts.cdnfonts.com/css/bitcount-prop-double" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Josefin Sans', sans-serif;
-      background: linear-gradient(135deg, gold, blue);
-      color: #000;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background-color: #002f6c;
-      color: white;
-    }
-    .sidebar {
-      width: 220px;
-      background-color: #2a001a;
-      color: white;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      padding: 1rem;
-      overflow-y: auto;
-    }
-    .sidebar h3 {
-      margin-bottom: 10px;
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
-    }
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-    .sidebar ul li {
-      margin: 8px 0;
-      cursor: pointer;
-    }
-    .hero {
-      margin-left: 230px;
-      padding: 2rem;
-      font-family: 'Oswald', sans-serif;
-    }
-    .hero h1 {
-      font-size: 3rem;
-    }
-    .hero .subtitle-wrapper {
-      overflow: hidden;
-      height: 2rem;
-      position: relative;
-      font-family: 'Bitcount Prop Double', monospace;
-    }
-    .hero .subtitle-text {
-      position: absolute;
-      white-space: nowrap;
-      animation: marqueeLoop 15s linear infinite;
-      font-size: 1.3rem;
-    }
-    @keyframes marqueeLoop {
-      0%   { left: 100%; }
-      100% { left: -100%; }
-    }
-    .search-bar {
-      text-align: right;
-      margin-top: 20px;
-    }
-    .search-bar input {
-      padding: 10px;
-      width: 250px;
-    }
-    .faq, .menu, .pricing, .footer {
-      margin-left: 230px;
-      padding: 2rem;
-    }
-    .accordion {
-      background-color: #FFD700;
-      margin-bottom: 10px;
-      cursor: pointer;
-      padding: 1rem;
-      color: black;
-      font-weight: bold;
-    }
-    .panel {
-      background: #FFF8DC;
-      display: none;
-      padding: 1rem;
-    }
-    .menu ul {
-      max-height: 300px;
-      overflow-y: scroll;
-      background: #800080;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    .menu ul li {
-      background-color: #4B004B;
-      color: white;
-      padding: 1rem;
-      margin-bottom: 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .menu ul li:hover {
-      background-color: #600060;
-    }
-    .pricing .plan {
-      background-color: #FFD700;
-      color: black;
-      padding: 2rem;
-      margin: 2rem 0;
-      font-size: 1.5rem;
-      text-align: center;
-      font-weight: bold;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .pricing .plan:hover {
-      transform: scale(1.05);
-    }
-    .footer {
-      background-color: #222;
-      color: white;
-      padding: 2rem;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #000; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002f6c; color: white; }
+    .sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
+    .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li { margin: 8px 0; cursor: pointer; }
+    .hero { margin-left: 230px; padding: 2rem; font-family: 'Oswald', sans-serif; }
+    .hero h1 { font-size: 3rem; }
+    .hero .subtitle-wrapper { overflow: hidden; height: 2rem; position: relative; font-family: monospace; }
+    .hero .subtitle-text { position: absolute; white-space: nowrap; animation: marqueeLoop 15s linear infinite; font-size: 1.3rem; }
+    @keyframes marqueeLoop { 0% { left: 100%; } 100% { left: -100%; } }
+    .search-bar { text-align: right; margin-top: 20px; }
+    .search-bar input { padding: 10px; width: 250px; }
+    .faq, .menu, .pricing, .footer { margin-left: 230px; padding: 2rem; }
+    .accordion { background-color: #FFD700; margin-bottom: 10px; cursor: pointer; padding: 1rem; color: black; font-weight: bold; border-radius: 5px; }
+    .panel { background: #FFF8DC; display: none; padding: 1rem; }
+    .menu ul { max-height: 300px; overflow-y: scroll; background: #800080; padding: 1rem; margin-bottom: 1rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+    .menu ul li { background-color: #4B004B; color: white; padding: 1rem; margin-bottom: 0.5rem; border-radius: 6px; cursor: pointer; transition: background 0.3s ease; }
+    .menu ul li:hover { background-color: #600060; }
+    .pricing .plan { background-color: #FFD700; color: black; padding: 2rem; margin: 2rem 0; font-size: 1.5rem; text-align: center; font-weight: bold; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s ease; }
+    .pricing .plan:hover { transform: scale(1.05); }
+    .footer { background-color: #222; color: white; padding: 2rem; }
     @media (max-width: 768px) {
-      .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-      }
-      .hero, .faq, .menu, .pricing, .footer {
-        margin-left: 0;
-        padding: 1rem;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .hero .subtitle-text {
-        font-size: 1rem;
-      }
-      .search-bar {
-        text-align: center;
-      }
+      .sidebar { position: static; width: 100%; height: auto; }
+      .hero, .faq, .menu, .pricing, .footer { margin-left: 0; padding: 1rem; }
+      .hero h1 { font-size: 2rem; }
+      .hero .subtitle-text { font-size: 1rem; }
+      .search-bar { text-align: center; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div><strong>Ready Files Romania</strong></div>
+    <div><strong>Done Files Romania</strong></div>
   </header>
   <div class="sidebar">
     <h3>Menu</h3>
@@ -178,7 +54,7 @@
     </ul>
   </div>
   <section class="hero">
-    <h1>Ready Files Romania</h1>
+    <h1>Done Files Romania</h1>
     <div class="subtitle-wrapper">
       <div class="subtitle-text">simple solutions for opening your business - fast, reliable, done for you</div>
     </div>
@@ -194,23 +70,40 @@
     <div class="panel">We offer full information packages and an optional "We Do It For You" service.</div>
   </section>
   <section class="menu">
-    <h2>Business Types</h2>
-    <ul>
-      <li onclick="alert('SRL section coming soon')">SRL</li>
-      <li onclick="alert('PFA section coming soon')">PFA</li>
-      <li onclick="alert('NGO section coming soon')">NGO</li>
+    <h2>Business Types by Industry in Romania</h2>
+    <ul id="industryList">
+      <li class="accordion">Agriculture</li>
+      <div class="panel"><ul><li onclick="selectOption('industry','Agriculture','SRL')">SRL</li><li onclick="selectOption('industry','Agriculture','PFA')">PFA</li><li onclick="selectOption('industry','Agriculture','II')">II</li><li onclick="selectOption('industry','Agriculture','Cooperative')">Cooperative</li></ul></div>
+
+      <li class="accordion">IT & Software</li>
+      <div class="panel"><ul><li onclick="selectOption('industry','IT & Software','SRL')">SRL</li><li onclick="selectOption('industry','IT & Software','SRL-D')">SRL-D</li><li onclick="selectOption('industry','IT & Software','SA')">SA</li></ul></div>
+
+      <li class="accordion">Hospitality & Restaurants</li>
+      <div class="panel"><ul><li onclick="selectOption('industry','Hospitality & Restaurants','SRL')">SRL</li><li onclick="selectOption('industry','Hospitality & Restaurants','PFA')">PFA</li><li onclick="selectOption('industry','Hospitality & Restaurants','II')">II</li></ul></div>
+
+      <li class="accordion">Transport & Logistics</li>
+      <div class="panel"><ul><li onclick="selectOption('industry','Transport & Logistics','SRL')">SRL</li><li onclick="selectOption('industry','Transport & Logistics','PFA')">PFA</li><li onclick="selectOption('industry','Transport & Logistics','SA')">SA</li></ul></div>
+
+      <li class="accordion">Construction & Real Estate</li>
+      <div class="panel"><ul><li onclick="selectOption('industry','Construction & Real Estate','SRL')">SRL</li><li onclick="selectOption('industry','Construction & Real Estate','SA')">SA</li><li onclick="selectOption('industry','Construction & Real Estate','PFA')">PFA</li></ul></div>
     </ul>
-    <h2>Romania Counties</h2>
-    <ul>
-      <li onclick="alert('Timisoara section coming soon')">Timisoara</li>
-      <li onclick="alert('Cluj section coming soon')">Cluj</li>
-      <li onclick="alert('Bucharest section coming soon')">Bucharest</li>
-    </ul>
-    <h2>Continents</h2>
-    <ul>
-      <li onclick="alert('Europe expansion coming soon')">Europe</li>
-      <li onclick="alert('Asia expansion coming soon')">Asia</li>
-      <li onclick="alert('America expansion coming soon')">America</li>
+
+    <h2>Cities in Romania</h2>
+    <ul id="cityList">
+      <li onclick="selectOption('city','Bucharest')">Bucharest</li>
+      <li onclick="selectOption('city','Cluj-Napoca')">Cluj-Napoca</li>
+      <li onclick="selectOption('city','Timișoara')">Timișoara</li>
+      <li onclick="selectOption('city','Iași')">Iași</li>
+      <li onclick="selectOption('city','Constanța')">Constanța</li>
+      <li onclick="selectOption('city','Oradea')">Oradea</li>
+      <li onclick="selectOption('city','Brașov')">Brașov</li>
+      <li onclick="selectOption('city','Sibiu')">Sibiu</li>
+      <li onclick="selectOption('city','Galați')">Galați</li>
+      <li onclick="selectOption('city','Craiova')">Craiova</li>
+      <li onclick="selectOption('city','Arad')">Arad</li>
+      <li onclick="selectOption('city','Ploiești')">Ploiești</li>
+      <li onclick="selectOption('city','Bacău')">Bacău</li>
+      <li onclick="selectOption('city','Buzău')">Buzău</li>
     </ul>
   </section>
   <section class="pricing">
@@ -226,14 +119,33 @@
     <p>About Us | Contact | Legal | Terms of Service</p>
   </footer>
   <script>
+    // Accordion toggle
     const acc = document.querySelectorAll(".accordion");
     acc.forEach(btn => {
       btn.addEventListener("click", function () {
         this.classList.toggle("active");
         const panel = this.nextElementSibling;
-        panel.style.display = panel.style.display === "block" ? "none" : "block";
+        if(panel){
+          panel.style.display = panel.style.display === "block" ? "none" : "block";
+        }
       });
     });
+
+    // Store selections in localStorage
+    function selectOption(type, value, subValue = null){
+      if(type === 'city'){
+        localStorage.setItem('selectedCity', value);
+        alert('City selected: ' + value);
+      }
+      if(type === 'industry'){
+        localStorage.setItem('selectedIndustry', value);
+        if(subValue){
+          localStorage.setItem('selectedForm', subValue);
+          alert('Industry: ' + value + " | Form: " + subValue);
+          // TODO: redirect to details page later
+        }
+      }
+    }
   </script>
 </body>
 </html>
