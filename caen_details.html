@@ -101,7 +101,7 @@
   </footer>
 
   <script>
-    // Include all CAEN data inline for GitHub compatibility
+     // Include all CAEN data inline for GitHub compatibility
     const caenData = [
   {
     "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
@@ -940,39 +940,63 @@
   ]
 }
 ]
+        ]
+      }
+    ];
 
+    // Read what the user picked in index.html
+    const selectedIndustry = localStorage.getItem('selectedIndustry');
+    const selectedForm = localStorage.getItem('selectedForm');
+
+    function filterCaen(industry, form) {
+      if (!industry) return [];
+
+      if (industry.includes("IT")) {
+        return caenData.filter(s => s.sectiune.startsWith("J."));
+      }
+      if (industry.includes("Restaurant")) {
+        return caenData.filter(s => s.sectiune.startsWith("I."));
+      }
+      return [];
+    }
 
     const container = document.getElementById("caenContainer");
     container.innerHTML = "";
 
-    caenData.forEach(section => {
-      const sectionCard = document.createElement("div");
-      sectionCard.className = "section-card";
+    const results = filterCaen(selectedIndustry, selectedForm);
 
-      const sectionTitle = document.createElement("h2");
-      sectionTitle.textContent = section.sectiune;
-      sectionCard.appendChild(sectionTitle);
+    if (results.length === 0) {
+      container.innerHTML = `<p>No CAEN codes found for <b>${selectedIndustry || "?"}</b> (${selectedForm || "?"})</p>`;
+    } else {
+      results.forEach(section => {
+        const sectionCard = document.createElement("div");
+        sectionCard.className = "section-card";
 
-      const division = document.createElement("div");
-      division.className = "division";
+        const sectionTitle = document.createElement("h2");
+        sectionTitle.textContent = section.sectiune;
+        sectionCard.appendChild(sectionTitle);
 
-      const divisionTitle = document.createElement("h3");
-      divisionTitle.textContent = section.diviziune;
-      division.appendChild(divisionTitle);
+        const division = document.createElement("div");
+        division.className = "division";
 
-      const ul = document.createElement("ul");
-      ul.className = "class-list";
+        const divisionTitle = document.createElement("h3");
+        divisionTitle.textContent = section.diviziune;
+        division.appendChild(divisionTitle);
 
-      section.clase.forEach(clasa => {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
-        ul.appendChild(li);
+        const ul = document.createElement("ul");
+        ul.className = "class-list";
+
+        section.clase.forEach(clasa => {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
+          ul.appendChild(li);
+        });
+
+        division.appendChild(ul);
+        sectionCard.appendChild(division);
+        container.appendChild(sectionCard);
       });
-
-      division.appendChild(ul);
-      sectionCard.appendChild(division);
-      container.appendChild(sectionCard);
-    });
+    }
   </script>
 </body>
 </html>
