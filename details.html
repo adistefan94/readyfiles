@@ -945,17 +945,31 @@
     const selectedIndustry = localStorage.getItem('selectedIndustry');
     const selectedForm = localStorage.getItem('selectedForm');
 
-    function filterCaen(industry, form) {
-      if (!industry) return [];
+   function filterCaen(industry, form) {
+  if (!industry) return [];
 
-      if (industry.includes("IT")) {
-        return caenData.filter(s => s.sectiune.startsWith("J."));
-      }
-      if (industry.includes("Restaurant")) {
-        return caenData.filter(s => s.sectiune.startsWith("I."));
-      }
-      return [];
-    }
+  if (industry.includes("IT")) {
+    return caenData.filter(s => s.sectiune.startsWith("J."));
+  }
+  if (industry.includes("Restaurant")) {
+    return caenData.filter(s => s.sectiune.startsWith("I."));
+  }
+  if (industry.includes("Agriculture")) {
+    return caenData.filter(s => s.sectiune.startsWith("A."));
+  }
+  if (industry.includes("Transport")) {
+    return caenData.filter(s => s.sectiune.startsWith("H."));
+  }
+  if (industry.includes("Construction")) {
+    return caenData.filter(s => s.sectiune.startsWith("F."));
+  }
+  if (industry.includes("Real Estate")) {
+    return caenData.filter(s => s.sectiune.startsWith("L."));
+  }
+
+  return [];
+}
+
 
     const container = document.getElementById("caenContainer");
     container.innerHTML = "";
