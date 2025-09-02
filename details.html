@@ -4,107 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CAEN Codes Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f7f9;
-      color: #333;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #fff; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002f6c; color: white; }
+    .sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
+    .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li { margin: 8px 0; cursor: pointer; }
+    .main { margin-left: 230px; padding: 2rem; }
+    .main h1 { font-family: 'Oswald', sans-serif; font-size: 2.2rem; margin-bottom: 1rem; }
 
-    header {
-      background: linear-gradient(135deg, #4CAF50, #2E7D32);
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+    .search-bar { margin-bottom: 20px; text-align: right; }
+    .search-bar input { padding: 10px; width: 280px; border-radius: 6px; border: none; }
 
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
+    .accordion-section { background-color: #111836; margin-bottom: 10px; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.4); }
+    .accordion-header { background-color: #4B004B; color: white; padding: 1rem; cursor: pointer; font-weight: bold; border-bottom: 1px solid #333; transition: background 0.3s ease; }
+    .accordion-header:hover { background-color: #600060; }
+    .accordion-content { display: none; padding: 1rem; background: #1a1f3c; }
 
-    .container {
-      width: 95%;
-      max-width: 1200px;
-      margin: 20px auto;
-    }
+    .division { margin-bottom: 12px; }
+    .division h3 { font-size: 1.1rem; margin-bottom: 8px; color: #FFD700; cursor: pointer; }
+    .division-content { display: none; margin-left: 15px; }
 
-    .section-card {
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      padding: 20px;
-    }
+    .class-list { list-style: none; padding-left: 0; }
+    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; }
+    .class-list li:hover { background: #3a4070; }
 
-    .section-card h2 {
-      margin-top: 0;
-      color: #2E7D32;
-    }
+    mark { background: #FFD700; color: black; padding: 0 2px; border-radius: 3px; }
 
-    .division {
-      margin: 15px 0;
-      padding: 15px;
-      border-left: 4px solid #4CAF50;
-      background: #f9fdf9;
-      border-radius: 8px;
-    }
-
-    .division h3 {
-      margin: 0 0 10px 0;
-      font-size: 1.1rem;
-      color: #388E3C;
-    }
-
-    .class-list {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .class-list li {
-      background: #E8F5E9;
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.2s;
-    }
-
-    .class-list li:hover {
-      background: #C8E6C9;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: #4CAF50;
-      color: white;
-      margin-top: 40px;
+    @media (max-width: 768px) {
+      .sidebar { position: static; width: 100%; height: auto; }
+      .main { margin-left: 0; padding: 1rem; }
+      .search-bar { text-align: center; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Clasificare CAEN - Detalii</h1>
+    <div><strong>Done Files Romania</strong></div>
+    <div>CAEN Codes Explorer</div>
   </header>
 
-  <div class="container" id="caenContainer">
-    <p>Se încarcă datele CAEN...</p>
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li>Business Type Categories</li>
+      <li>Document Checklist</li>
+      <li>Useful Tools</li>
+      <li>Quick Links</li>
+      <li>Language Switcher</li>
+      <li>Contact / Help</li>
+    </ul>
   </div>
 
-  <footer>
-    &copy; 2025 Portal CAEN
-  </footer>
+  <main class="main">
+    <h1>Clasificare CAEN - Detalii</h1>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Caută activitate sau cod CAEN...">
+    </div>
 
+    <div id="caenContainer"></div>
+  </main>
   <script>
-     // Include all CAEN data inline for GitHub compatibility
+    // Include all CAEN data inline for GitHub compatibility
     const caenData = [
   {
-    "sectiune": "A. AGRICULTURE, SILVICULTURĂ ȘI PESCUIT",
+    "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
     "diviziune": "01 Agricultura, vânătoare și servicii anexe",
     "clase": [
       {
@@ -939,75 +906,73 @@
     {"cod": "9604", "denumire": "Alte activități de servicii pentru gospodării și uz personal n.c.a."}
   ]
 }
-]
-
-    // Read what the user picked in index.html
-    const selectedIndustry = localStorage.getItem('selectedIndustry');
-    const selectedForm = localStorage.getItem('selectedForm');
-
-   function filterCaen(industry, form) {
-  if (!industry) return [];
-
-  if (industry.includes("IT")) {
-    return caenData.filter(s => s.sectiune.startsWith("J."));
-  }
-  if (industry.includes("Restaurant")) {
-    return caenData.filter(s => s.sectiune.startsWith("I."));
-  }
-  if (industry.includes("Agriculture")) {
-    return caenData.filter(s => s.sectiune.startsWith("A."));
-  }
-  if (industry.includes("Transport")) {
-    return caenData.filter(s => s.sectiune.startsWith("H."));
-  }
-  if (industry.includes("Construction")) {
-    return caenData.filter(s => s.sectiune.startsWith("F."));
-  }
-  if (industry.includes("Real Estate")) {
-    return caenData.filter(s => s.sectiune.startsWith("L."));
-  }
-
-  return [];
-}
-
+ 
+    ];
 
     const container = document.getElementById("caenContainer");
-    container.innerHTML = "";
 
-    const results = filterCaen(selectedIndustry, selectedForm);
+    function renderCAEN(query = "") {
+      container.innerHTML = "";
+      const lowerQuery = query.toLowerCase();
 
-    if (results.length === 0) {
-      container.innerHTML = `<p>No CAEN codes found for <b>${selectedIndustry || "?"}</b> (${selectedForm || "?"})</p>`;
-    } else {
-      results.forEach(section => {
+      caenData.forEach(section => {
         const sectionCard = document.createElement("div");
-        sectionCard.className = "section-card";
+        sectionCard.className = "accordion-section";
 
-        const sectionTitle = document.createElement("h2");
-        sectionTitle.textContent = section.sectiune;
-        sectionCard.appendChild(sectionTitle);
+        const sectionHeader = document.createElement("div");
+        sectionHeader.className = "accordion-header";
+        sectionHeader.textContent = section.sectiune;
+        sectionHeader.onclick = () => {
+          sectionContent.style.display = sectionContent.style.display === "block" ? "none" : "block";
+        };
 
+        const sectionContent = document.createElement("div");
+        sectionContent.className = "accordion-content";
+
+        // Division
         const division = document.createElement("div");
         division.className = "division";
+        const divHeader = document.createElement("h3");
+        divHeader.textContent = section.diviziune;
+        divHeader.onclick = () => {
+          divContent.style.display = divContent.style.display === "block" ? "none" : "block";
+        };
 
-        const divisionTitle = document.createElement("h3");
-        divisionTitle.textContent = section.diviziune;
-        division.appendChild(divisionTitle);
+        const divContent = document.createElement("div");
+        divContent.className = "division-content";
 
         const ul = document.createElement("ul");
         ul.className = "class-list";
 
-        section.clase.forEach(clasa => {
+        section.clase.forEach(cl => {
+          let name = cl.denumire;
+          let code = cl.cod;
+          if (lowerQuery && (name.toLowerCase().includes(lowerQuery) || code.includes(lowerQuery))) {
+            name = name.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+            code = code.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+          }
           const li = document.createElement("li");
-          li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
+          li.innerHTML = `<strong>${code}</strong> - ${name}`;
           ul.appendChild(li);
         });
 
-        division.appendChild(ul);
-        sectionCard.appendChild(division);
+        divContent.appendChild(ul);
+        division.appendChild(divHeader);
+        division.appendChild(divContent);
+        sectionContent.appendChild(division);
+
+        sectionCard.appendChild(sectionHeader);
+        sectionCard.appendChild(sectionContent);
         container.appendChild(sectionCard);
       });
     }
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      renderCAEN(e.target.value);
+    });
+
+    // Initial render
+    renderCAEN();
   </script>
 </body>
 </html>
