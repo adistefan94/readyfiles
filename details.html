@@ -910,14 +910,11 @@
     ];
 
     const container = document.getElementById("caenContainer");
-
- function renderCAEN(query = "", filterIndustry = null) {
+function renderCAEN(filterIndustry = null) {
   container.innerHTML = "";
-  const lowerQuery = query.toLowerCase();
 
+  // if we have a filter from localStorage
   let filteredData = caenData;
-
-  // 🎯 filter by industry if available
   if (filterIndustry) {
     filteredData = caenData.filter(section =>
       section.sectiune.toLowerCase().includes(filterIndustry.toLowerCase()) ||
@@ -925,71 +922,43 @@
     );
   }
 
+  // render filtered or all
   filteredData.forEach(section => {
-    // same accordion rendering code...
+    const sectionCard = document.createElement("div");
+    sectionCard.className = "section-card";
+
+    const sectionTitle = document.createElement("h2");
+    sectionTitle.textContent = section.sectiune;
+    sectionCard.appendChild(sectionTitle);
+
+    const division = document.createElement("div");
+    division.className = "division";
+
+    const divisionTitle = document.createElement("h3");
+    divisionTitle.textContent = section.diviziune;
+    division.appendChild(divisionTitle);
+
+    const ul = document.createElement("ul");
+    ul.className = "class-list";
+
+    section.clase.forEach(clasa => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
+      ul.appendChild(li);
+    });
+
+    division.appendChild(ul);
+    sectionCard.appendChild(division);
+    container.appendChild(sectionCard);
   });
 }
 
-      caenData.forEach(section => {
-        const sectionCard = document.createElement("div");
-        sectionCard.className = "accordion-section";
+// get selection from localStorage
+const selectedIndustry = localStorage.getItem('selectedIndustry');
 
-        const sectionHeader = document.createElement("div");
-        sectionHeader.className = "accordion-header";
-        sectionHeader.textContent = section.sectiune;
-        sectionHeader.onclick = () => {
-          sectionContent.style.display = sectionContent.style.display === "block" ? "none" : "block";
-        };
-
-        const sectionContent = document.createElement("div");
-        sectionContent.className = "accordion-content";
-
-        // Division
-        const division = document.createElement("div");
-        division.className = "division";
-        const divHeader = document.createElement("h3");
-        divHeader.textContent = section.diviziune;
-        divHeader.onclick = () => {
-          divContent.style.display = divContent.style.display === "block" ? "none" : "block";
-        };
-
-        const divContent = document.createElement("div");
-        divContent.className = "division-content";
-
-        const ul = document.createElement("ul");
-        ul.className = "class-list";
-
-        section.clase.forEach(cl => {
-          let name = cl.denumire;
-          let code = cl.cod;
-          if (lowerQuery && (name.toLowerCase().includes(lowerQuery) || code.includes(lowerQuery))) {
-            name = name.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
-            code = code.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
-          }
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${code}</strong> - ${name}`;
-          ul.appendChild(li);
-        });
-
-        divContent.appendChild(ul);
-        division.appendChild(divHeader);
-        division.appendChild(divContent);
-        sectionContent.appendChild(division);
-
-        sectionCard.appendChild(sectionHeader);
-        sectionCard.appendChild(sectionContent);
-        container.appendChild(sectionCard);
-      });
-    }
-
-    document.getElementById("searchInput").addEventListener("input", e => {
-      renderCAEN(e.target.value);
-    });
-
-    // Initial render
-const savedIndustry = localStorage.getItem('selectedIndustry');
-if (savedIndustry) {
-  renderCAEN(savedIndustry); // filter by industry
+// call renderer with filter if we have one
+if (selectedIndustry) {
+  renderCAEN(selectedIndustry);
 } else {
   renderCAEN(); // fallback to all
 }
