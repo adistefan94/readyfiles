@@ -8,12 +8,6 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #000; }
-    <div style="background:#0f172a;padding:10px;">
-  <a href="wizard.html" style="color:#fff;text-decoration:none;font-weight:bold;">
-    ➡️ Start a new project
-  </a>
-</div>
-
     header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002f6c; color: white; }
     .sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
     .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
@@ -75,22 +69,6 @@
     <div class="accordion">What Do We Do</div>
     <div class="panel">We offer full information packages and an optional "We Do It For You" service.</div>
   </section>
-  <section class="menu" id="caenSearchSection">
-  <h2>Search CAEN by Business</h2>
-  <div class="caen-search-box">
-    <input id="caenQuery" type="text" placeholder="e.g., restaurant, barber, IT software, construction…">
-    <button onclick="goCaenSearch()">Search</button>
-  </div>
-  <div class="quick-chips">
-    <span onclick="fillCaen('restaurant')">Restaurant</span>
-    <span onclick="fillCaen('coffee shop')">Coffee shop</span>
-    <span onclick="fillCaen('barber')">Barber</span>
-    <span onclick="fillCaen('it software')">IT software</span>
-    <span onclick="fillCaen('construction')">Construction</span>
-    <span onclick="fillCaen('logistics')">Logistics</span>
-  </div>
-</section>
-
   <section class="menu">
     <h2>Business Types by Industry in Romania</h2>
     <ul id="industryList">
@@ -141,7 +119,7 @@
     <p>About Us | Contact | Legal | Terms of Service</p>
   </footer>
   <script>
-  // Accordion toggle
+    // Accordion toggle
     const acc = document.querySelectorAll(".accordion");
     acc.forEach(btn => {
       btn.addEventListener("click", function () {
@@ -157,30 +135,16 @@
     function selectOption(type, value, subValue = null){
       if(type === 'city'){
         localStorage.setItem('selectedCity', value);
-        alert('City selected: ' + value);
       }
       if(type === 'industry'){
         localStorage.setItem('selectedIndustry', value);
         if(subValue){
           localStorage.setItem('selectedForm', subValue);
+          // Redirect to CAEN page
           window.location.href = "details.html";
         }
       }
     }
   </script>
-  <script>
-  function fillCaen(text){
-    const q = document.getElementById('caenQuery');
-    q.value = text;
-    q.focus();
-  }
-  function goCaenSearch(){
-    const q = (document.getElementById('caenQuery').value || '').trim();
-    if(!q) { alert('Type a business to search CAEN.'); return; }
-    // go to your CAEN page with a search query
-    window.location.href = 'caen_details.html?q=' + encodeURIComponent(q);
-  }
-</script>
-
 </body>
 </html>
