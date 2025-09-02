@@ -141,33 +141,41 @@
     <p>About Us | Contact | Legal | Terms of Service</p>
   </footer>
   <script>
-    // Accordion toggle
-    const acc = document.querySelectorAll(".accordion");
-    acc.forEach(btn => {
-      btn.addEventListener("click", function () {
-        this.classList.toggle("active");
-        const panel = this.nextElementSibling;
-        if(panel){
-          panel.style.display = panel.style.display === "block" ? "none" : "block";
-        }
-      });
-    });
-
-    // Store selections in localStorage
-    function selectOption(type, value, subValue = null){
-      if(type === 'city'){
-        localStorage.setItem('selectedCity', value);
-        alert('City selected: ' + value);
+  // Accordion toggle
+  const acc = document.querySelectorAll(".accordion");
+  acc.forEach(btn => {
+    btn.addEventListener("click", function () {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      if (panel) {
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
       }
-      if(type === 'industry'){
-        localStorage.setItem('selectedIndustry', value);
-        if(subValue){
-          localStorage.setItem('selectedForm', subValue);
-          window.location.href = "details.html";
-        }
+    });
+  });
+
+  // Store selections in localStorage + redirect
+  function selectOption(type, value, subValue = null) {
+    if (type === 'city') {
+      localStorage.setItem('selectedCity', value);
+      alert('City selected: ' + value);
+      return;
+    }
+
+    if (type === 'industry') {
+      localStorage.setItem('selectedIndustry', value);
+      if (subValue) {
+        localStorage.setItem('selectedForm', subValue);
+        alert('Industry: ' + value + " | Form: " + subValue);
+
+        // ✅ Redirect to the wizard
+        window.location.href = 'wizard.html';
+      } else {
+        alert('Industry selected: ' + value);
       }
     }
-  </script>
+  }
+</script>
+
   <script>
   function fillCaen(text){
     const q = document.getElementById('caenQuery');
