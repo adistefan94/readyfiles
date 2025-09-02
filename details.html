@@ -961,56 +961,6 @@ if (selectedIndustry) {
   renderCAEN(selectedIndustry);
 } else {
   renderCAEN(); // fallback to all
-}
-function renderCAEN(filterIndustry = null) {
-  container.innerHTML = "";
-
-  let filteredData = caenData;
-  if (filterIndustry) {
-    filteredData = caenData.filter(section =>
-      section.sectiune.toLowerCase().includes(filterIndustry.toLowerCase()) ||
-      section.diviziune.toLowerCase().includes(filterIndustry.toLowerCase())
-    );
-  }
-
-  filteredData.forEach(section => {
-    const sectionCard = document.createElement("div");
-    sectionCard.className = "section-card";
-
-    const sectionTitle = document.createElement("h2");
-    sectionTitle.textContent = section.sectiune;
-    sectionCard.appendChild(sectionTitle);
-
-    const division = document.createElement("div");
-    division.className = "division";
-
-    const divisionTitle = document.createElement("h3");
-    divisionTitle.textContent = section.diviziune;
-    division.appendChild(divisionTitle);
-
-    const ul = document.createElement("ul");
-    ul.className = "class-list";
-
-    section.clase.forEach(clasa => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
-      ul.appendChild(li);
-    });
-
-    division.appendChild(ul);
-    sectionCard.appendChild(division);
-    container.appendChild(sectionCard);
-  });
-}
-
-// 🔎 check selection from localStorage
-const selectedIndustry = localStorage.getItem('selectedIndustry');
-if (selectedIndustry) {
-  renderCAEN(selectedIndustry);
-} else {
-  renderCAEN();
-}
-
   </script>
 </body>
 </html>
