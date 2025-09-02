@@ -168,5 +168,19 @@
       }
     }
   </script>
+  <script>
+  function fillCaen(text){
+    const q = document.getElementById('caenQuery');
+    q.value = text;
+    q.focus();
+  }
+  function goCaenSearch(){
+    const q = (document.getElementById('caenQuery').value || '').trim();
+    if(!q) { alert('Type a business to search CAEN.'); return; }
+    // go to your CAEN page with a search query
+    window.location.href = 'caen_details.html?q=' + encodeURIComponent(q);
+  }
+</script>
+
 </body>
 </html>
