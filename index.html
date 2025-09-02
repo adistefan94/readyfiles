@@ -141,6 +141,7 @@
     <p>About Us | Contact | Legal | Terms of Service</p>
   </footer>
   <script>
+ <script>
   // Accordion toggle
   const acc = document.querySelectorAll(".accordion");
   acc.forEach(btn => {
@@ -157,7 +158,7 @@
   function selectOption(type, value, subValue = null) {
     if (type === 'city') {
       localStorage.setItem('selectedCity', value);
-      alert('City selected: ' + value);
+      // no alert anymore
       return;
     }
 
@@ -165,17 +166,13 @@
       localStorage.setItem('selectedIndustry', value);
       if (subValue) {
         localStorage.setItem('selectedForm', subValue);
-        alert('Industry: ' + value + " | Form: " + subValue);
 
-        // ✅ Redirect to the wizard
-        window.location.href = window.location.href = 'pages/wizard.html';
-      } else {
-        alert('Industry selected: ' + value);
+        // ✅ go straight to the wizard
+        window.location.href = 'wizard.html';
       }
     }
   }
 </script>
-
   <script>
   function fillCaen(text){
     const q = document.getElementById('caenQuery');
