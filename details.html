@@ -911,9 +911,31 @@
 
     const container = document.getElementById("caenContainer");
 
-    function renderCAEN(query = "") {
-      container.innerHTML = "";
-      const lowerQuery = query.toLowerCase();
+const savedIndustry = localStorage.getItem('selectedIndustry');
+if (savedIndustry) {
+  renderCAEN(savedIndustry); 
+} else {
+  renderCAEN(); 
+}
+    function renderCAEN(query = "", filterIndustry = null) {
+  container.innerHTML = "";
+  const lowerQuery = query.toLowerCase();
+
+  let filteredData = caenData;
+
+  // 🎯 filter by industry if available
+  if (filterIndustry) {
+    filteredData = caenData.filter(section =>
+      section.sectiune.toLowerCase().includes(filterIndustry.toLowerCase()) ||
+      section.diviziune.toLowerCase().includes(filterIndustry.toLowerCase())
+    );
+  }
+
+  filteredData.forEach(section => {
+    // same accordion rendering code...
+  });
+}
+
 
       caenData.forEach(section => {
         const sectionCard = document.createElement("div");
