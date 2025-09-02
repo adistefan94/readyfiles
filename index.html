@@ -75,6 +75,22 @@
     <div class="accordion">What Do We Do</div>
     <div class="panel">We offer full information packages and an optional "We Do It For You" service.</div>
   </section>
+  <section class="menu" id="caenSearchSection">
+  <h2>Search CAEN by Business</h2>
+  <div class="caen-search-box">
+    <input id="caenQuery" type="text" placeholder="e.g., restaurant, barber, IT software, construction…">
+    <button onclick="goCaenSearch()">Search</button>
+  </div>
+  <div class="quick-chips">
+    <span onclick="fillCaen('restaurant')">Restaurant</span>
+    <span onclick="fillCaen('coffee shop')">Coffee shop</span>
+    <span onclick="fillCaen('barber')">Barber</span>
+    <span onclick="fillCaen('it software')">IT software</span>
+    <span onclick="fillCaen('construction')">Construction</span>
+    <span onclick="fillCaen('logistics')">Logistics</span>
+  </div>
+</section>
+
   <section class="menu">
     <h2>Business Types by Industry in Romania</h2>
     <ul id="industryList">
