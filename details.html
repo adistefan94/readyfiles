@@ -29,10 +29,12 @@
     .division-content { display: none; margin-left: 15px; }
 
     .class-list { list-style: none; padding-left: 0; }
-    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; }
+    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; cursor: pointer; }
     .class-list li:hover { background: #3a4070; }
 
     mark { background: #FFD700; color: black; padding: 0 2px; border-radius: 3px; }
+
+    .no-caen { display:inline-block; margin:20px 0; padding:10px 16px; background:#FFD700; color:#000; border-radius:8px; cursor:pointer; font-weight:bold; }
 
     @media (max-width: 768px) {
       .sidebar { position: static; width: 100%; height: auto; }
@@ -66,10 +68,15 @@
     </div>
 
     <div id="caenContainer"></div>
+
+    <div style="margin-top:30px;">
+      <span class="no-caen" onclick="selectNoCaen()">Nu am CAEN (continuă fără)</span>
+    </div>
   </main>
+
   <script>
-    // Include all CAEN data inline for GitHub compatibility
-    const caenData = [
+   
+    const caenData =  [
   {
     "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
     "diviziune": "01 Agricultura, vânătoare și servicii anexe",
@@ -906,10 +913,10 @@
     {"cod": "9604", "denumire": "Alte activități de servicii pentru gospodării și uz personal n.c.a."}
   ]
 }
- 
-    ];
+]
     const container = document.getElementById("caenContainer");
- function renderCAEN(query = "") {
+
+    function renderCAEN(query = "") {
       container.innerHTML = "";
       const lowerQuery = query.toLowerCase();
 
@@ -951,6 +958,13 @@
           }
           const li = document.createElement("li");
           li.innerHTML = `<strong>${code}</strong> - ${name}`;
+
+          // Make CAEN clickable → save & redirect
+          li.addEventListener("click", () => {
+            localStorage.setItem('selectedCaen', code + ' - ' + cl.denumire);
+            window.location.href = 'wizard.html';
+          });
+
           ul.appendChild(li);
         });
 
@@ -968,6 +982,11 @@
     document.getElementById("searchInput").addEventListener("input", e => {
       renderCAEN(e.target.value);
     });
+
+    function selectNoCaen(){
+      localStorage.setItem('selectedCaen', 'None');
+      window.location.href = 'wizard.html';
+    }
 
     // Initial render
     renderCAEN();
