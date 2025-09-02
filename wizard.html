@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Start a New Project — DoneFiles</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* minimal inline styles so it works even without styles.css */
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;padding:0;line-height:1.5}
+    .wrap{max-width:780px;margin:24px auto;padding:16px}
+    h1{font-size:1.75rem;margin-bottom:8px}
+    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);margin:16px 0}
+    label{display:block;font-weight:600;margin:.5rem 0 .25rem}
+    input,select,button,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #cfd5e3}
+    .row{display:grid;gap:12px}
+    .row.two{grid-template-columns:1fr 1fr}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+    .step{display:none}
+    .step.active{display:block}
+    .muted{color:#6b7280;font-size:.9rem}
+    .success{background:#ecfdf5;border:1px solid #10b981;color:#065f46;padding:12px;border-radius:10px}
+    nav{background:#0f172a;color:#fff;padding:10px}
+    nav a{color:#fff;margin-right:14px;text-decoration:none}
+  </style>
+</head>
+<body>
+  <nav class="wrap" style="max-width:980px;">
+    <a href="index.html">Home</a>
+    <a href="index2.html">CAEN Codes</a>
+    <a href="details.html">Business Types</a>
+    <strong style="float:right;">DoneFiles</strong>
+  </nav>
+
+  <main class="wrap">
+    <h1>Start a New Project</h1>
+    <p class="muted">Answer a few questions and we’ll prepare your checklist. You’ll get a copy by email.</p>
+
+    <form id="wizard" class="card">
+      <!-- Step 1: Entity -->
+      <section class="step active" data-step="1">
+        <h2>Entity type</h2>
+        <label for="entity">Choose entity</label>
+        <select id="entity" required>
+          <option value="">Select…</option>
+          <option>SRL</option>
+          <option>PFA</option>
+          <option>II</option>
+        </select>
+        <div class="actions">
+          <button type="button" id="next1">Next</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Industry / CAEN -->
+      <section class="step" data-step="2">
+        <h2>Industry / CAEN</h2>
+        <label for="industry">Industry</label>
+        <select id="industry" required>
+          <option value="">Select…</option>
+          <option>HoReCa</option>
+          <option>IT & Software</option>
+          <option>Beauty</option>
+          <option>Retail</option>
+          <option>Services</option>
+        </select>
+
+        <label for="caen">CAEN (optional — type to search)</label>
+        <input id="caen" list="caen-list" placeholder="e.g. 6201 — Software la comandă">
+        <datalist id="caen-list"></datalist>
+
+        <div class="actions">
+          <button type="button" id="back2">Back</button>
+          <button type="button" id="next2">Next</button>
+        </div>
+      </section>
+
+      <!-- Step 3: City -->
+      <section class="step" data-step="3">
+        <h2>City</h2>
+        <label for="city">Where will you register?</label>
+        <input id="city" placeholder="București, Cluj-Napoca, Iași…" required>
+        <div class="actions">
+          <button type="button" id="back3">Back</button>
+          <button type="button" id="next3">Next</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Contact -->
+      <section class="step" data-step="4">
+        <h2>Contact details</h2>
+        <div class="row two">
+          <div>
+            <label for="name">Full name</label>
+            <input id="name" required>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" required>
+          </div>
+        </div>
+        <label for="phone">Phone (optional)</label>
+        <input id="phone" type="tel" placeholder="+40…">
+        <label><input type="checkbox" id="consent" required> I agree to be contacted about my project.</label>
+        <div class="actions">
+          <button type="button" id="back4">Back</button>
+          <button type="submit">Submit</button>
+        </div>
+      </section>
+    </form>
+
+    <div id="result" class="success" style="display:none;"></div>
+  </main>
+
+  <script>
+    // --- basic stepper ---
+    const steps = [...document.querySelectorAll('.step')];
+    let i = 0;
+    const show = idx => steps.forEach((s,n)=>s.classList.toggle('active', n===idx));
+    document.getElementById('next1').onclick = ()=>{ if(document.getElementById('entity').value) { i=1; show(i);} };
+    document.getElementById('back2').onclick = ()=>{ i=0; show(i); };
+    document.getElementById('next2').onclick = ()=>{ if(document.getElementById('industry').value) { i=2; show(i);} };
+    document.getElementById('back3').onclick = ()=>{ i=1; show(i); };
+    document.getElementById('next3').onclick = ()=>{ if(document.getElementById('city').value) { i=3; show(i);} };
+    document.getElementById('back4').onclick = ()=>{ i=2; show(i); };
+
+    // --- load CAEN suggestions from /assets/caen.json (to add next) ---
+    fetch('assets/caen.json').then(r => r.json()).then(list => {
+      const dl = document.getElementById('caen-list');
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = `${item.code} — ${item.name}`;
+        dl.appendChild(opt);
+      });
+    }).catch(()=>{ /* fine if file not present yet */ });
+
+    // --- submit to Google Apps Script endpoint (we’ll set up next) ---
+    document.getElementById('wizard').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const payload = {
+        entity: document.getElementById('entity').value,
+        industry: document.getElementById('industry').value,
+        caen: document.getElementById('caen').value,
+        city: document.getElementById('city').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value
+      };
+      try {
+        const r = await fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
+          method:'POST',
+          mode:'no-cors', // Apps Script often needs this; response may be opaque
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+      } catch(e){}
+      document.getElementById('result').style.display='block';
+      document.getElementById('result').textContent = 'Got it! We\'ll email you a checklist shortly.';
+      e.target.reset();
+      i = 0; show(i);
+    });
+  </script>
+</body>
+</html>
