@@ -2,166 +2,331 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Start a New Project — DoneFiles</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Setup Wizard — Done Files Romania</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* minimal inline styles so it works even without styles.css */
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;padding:0;line-height:1.5}
-    .wrap{max-width:780px;margin:24px auto;padding:16px}
-    h1{font-size:1.75rem;margin-bottom:8px}
-    .card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);margin:16px 0}
-    label{display:block;font-weight:600;margin:.5rem 0 .25rem}
-    input,select,button,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #cfd5e3}
-    .row{display:grid;gap:12px}
-    .row.two{grid-template-columns:1fr 1fr}
-    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .step{display:none}
-    .step.active{display:block}
-    .muted{color:#6b7280;font-size:.9rem}
-    .success{background:#ecfdf5;border:1px solid #10b981;color:#065f46;padding:12px;border-radius:10px}
-    nav{background:#0f172a;color:#fff;padding:10px}
-    nav a{color:#fff;margin-right:14px;text-decoration:none}
+    :root{
+      --bg:#0b1020; --card:#111836; --muted:#7b8bb2; --acc:#ffd54a; --ok:#19c37d; --danger:#ff5a5f;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1020,#0d1630 60%);color:#e7ecff;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;}
+    header{position:sticky;top:0;z-index:9;background:#0d1630b3;backdrop-filter:saturate(130%) blur(6px);border-bottom:1px solid #22305a}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--acc);box-shadow:0 0 16px var(--acc)}
+
+    main{max-width:1100px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns: 1.2fr 1fr;gap:20px}
+    @media (max-width: 980px){ main{grid-template-columns:1fr} }
+
+    .card{background:var(--card);border:1px solid #1c2650;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+    .card h2{margin:0;padding:18px 18px 0}
+    .card .body{padding:18px}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#1a244a;border:1px solid #203061;color:#cfe0ff;padding:6px 10px;border-radius:999px;font-size:12px}
+
+    .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+    .row > div{background:#0f1a3b;border:1px solid #29396b;padding:12px;border-radius:12px}
+    .row label{display:block;color:#b8c9ff;font-size:12px;margin-bottom:6px}
+    .row .val{font-weight:700;font-size:15px}
+
+    .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    button, .btn{appearance:none;border:0;background:#223264;color:#fff;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer;transition:transform .06s ease, background .2s}
+    button:hover,.btn:hover{transform:translateY(-1px);background:#2a3a74}
+    .btn-acc{background:var(--acc);color:#0b0f1f}
+    .btn-acc:hover{background:#ffdf79}
+    .btn-ok{background:var(--ok);color:#03120b}
+    .btn-danger{background:var(--danger)}
+
+    .muted{color:var(--muted);font-size:13px}
+    hr.sep{border:0;border-top:1px dashed #2e417d;margin:14px 0}
+
+    .checklist li{background:#0f1a3b;border:1px solid #263769;padding:12px;border-radius:10px;margin:8px 0;display:flex;gap:10px;align-items:flex-start}
+    .checklist input[type=checkbox]{margin-top:3px}
+
+    .fees{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:700px){.fees{grid-template-columns:1fr}}
+    .fee-item{background:#0f1a3b;border:1px solid #263769;border-radius:10px;padding:12px}
+    .fee-item .t{display:flex;justify-content:space-between}
+
+    .tag{display:inline-block;background:#122359;border:1px solid #27408e;border-radius:8px;padding:6px 8px;font-size:12px;color:#cfe0ff;margin-right:6px}
+
+    .footer-note{color:#98a8d6;font-size:12px;opacity:.9}
+
+    /* Print styles (for PDF via browser) */
+    @media print{
+      header, .controls.sticky-actions{display:none}
+      body{background:#fff;color:#000}
+      .card{border:1px solid #ccc}
+      .fee-item, .checklist li{border-color:#ccc}
+    }
   </style>
 </head>
 <body>
-  <nav class="wrap" style="max-width:980px;">
-    <a href="index.html">Home</a>
-    <a href="index2.html">CAEN Codes</a>
-    <a href="details.html">Business Types</a>
-    <strong style="float:right;">DoneFiles</strong>
-  </nav>
+  <header>
+    <div class="wrap brand"><span class="dot"></span> Done Files Romania <span class="muted">· Business Setup Wizard</span></div>
+  </header>
 
-  <main class="wrap">
-    <h1>Start a New Project</h1>
-    <p class="muted">Answer a few questions and we’ll prepare your checklist. You’ll get a copy by email.</p>
-
-    <form id="wizard" class="card">
-      <!-- Step 1: Entity -->
-      <section class="step active" data-step="1">
-        <h2>Entity type</h2>
-        <label for="entity">Choose entity</label>
-        <select id="entity" required>
-          <option value="">Select…</option>
-          <option>SRL</option>
-          <option>PFA</option>
-          <option>II</option>
-        </select>
-        <div class="actions">
-          <button type="button" id="next1">Next</button>
-        </div>
-      </section>
-
-      <!-- Step 2: Industry / CAEN -->
-      <section class="step" data-step="2">
-        <h2>Industry / CAEN</h2>
-        <label for="industry">Industry</label>
-        <select id="industry" required>
-          <option value="">Select…</option>
-          <option>HoReCa</option>
-          <option>IT & Software</option>
-          <option>Beauty</option>
-          <option>Retail</option>
-          <option>Services</option>
-        </select>
-
-        <label for="caen">CAEN (optional — type to search)</label>
-        <input id="caen" list="caen-list" placeholder="e.g. 6201 — Software la comandă">
-        <datalist id="caen-list"></datalist>
-
-        <div class="actions">
-          <button type="button" id="back2">Back</button>
-          <button type="button" id="next2">Next</button>
-        </div>
-      </section>
-
-      <!-- Step 3: City -->
-      <section class="step" data-step="3">
-        <h2>City</h2>
-        <label for="city">Where will you register?</label>
-        <input id="city" placeholder="București, Cluj-Napoca, Iași…" required>
-        <div class="actions">
-          <button type="button" id="back3">Back</button>
-          <button type="button" id="next3">Next</button>
-        </div>
-      </section>
-
-      <!-- Step 4: Contact -->
-      <section class="step" data-step="4">
-        <h2>Contact details</h2>
-        <div class="row two">
+  <main>
+    <!-- Left column: Wizard & Checklist -->
+    <section class="card" id="wizardCard">
+      <h2>Tailored Checklist</h2>
+      <div class="body">
+        <div class="pill" id="contextPill">Loading selection…</div>
+        <div class="row" style="margin-top:14px">
           <div>
-            <label for="name">Full name</label>
-            <input id="name" required>
+            <label>Industry</label>
+            <div class="val" id="valIndustry">—</div>
           </div>
           <div>
-            <label for="email">Email</label>
-            <input id="email" type="email" required>
+            <label>City</label>
+            <div class="val" id="valCity">—</div>
+          </div>
+          <div>
+            <label>Legal Form</label>
+            <div class="val" id="valForm">—</div>
           </div>
         </div>
-        <label for="phone">Phone (optional)</label>
-        <input id="phone" type="tel" placeholder="+40…">
-        <label><input type="checkbox" id="consent" required> I agree to be contacted about my project.</label>
-        <div class="actions">
-          <button type="button" id="back4">Back</button>
-          <button type="submit">Submit</button>
+        <div class="controls" style="margin-top:14px">
+          <button id="changeSelectionBtn" title="Change selection">Change selection</button>
+          <button class="btn-acc" id="printBtn" title="Print or save as PDF">Print / Save PDF</button>
+          <button class="btn-ok" id="orderBtn" title="Order Done-For-You">Order Done‑For‑You</button>
         </div>
-      </section>
-    </form>
+        <hr class="sep" />
 
-    <div id="result" class="success" style="display:none;"></div>
+        <h3 style="margin:0 0 8px">Required Documents</h3>
+        <ul class="checklist" id="docList"></ul>
+
+        <h3 style="margin:16px 0 8px">Extra Notes</h3>
+        <div id="notes" class="muted">—</div>
+      </div>
+    </section>
+
+    <!-- Right column: Fees & Timeline -->
+    <aside class="card">
+      <h2>Fees & Timeline</h2>
+      <div class="body">
+        <div class="fees" id="feesBox"></div>
+        <hr class="sep" />
+        <div>
+          <span class="tag" id="timelineTag">Timeline: —</span>
+          <span class="tag" id="caenTag">CAEN suggestions loaded</span>
+        </div>
+        <p class="footer-note" style="margin-top:10px">* All fees are indicative and editable. Official taxes may vary by city and changes in legislation. Keep your repo's JSON updated.</p>
+      </div>
+    </aside>
   </main>
 
+  <section class="card" style="max-width:1100px;margin:12px auto;padding-bottom:8px">
+    <h2>Recommended CAEN Codes</h2>
+    <div class="body" id="caenBox">We’ll show 3–8 relevant CAEN classes based on your selection.</div>
+  </section>
+
+  <section class="card" style="max-width:1100px;margin:12px auto 40px">
+    <h2>Questions or custom situation?</h2>
+    <div class="body">
+      <p class="muted">We’ll include your current selection in the message automatically.</p>
+      <div class="controls sticky-actions">
+        <a class="btn" id="contactBtn" href="#">Contact us</a>
+        <a class="btn" id="emailBtn" href="#">Email summary</a>
+      </div>
+    </div>
+  </section>
+
   <script>
-    // --- basic stepper ---
-    const steps = [...document.querySelectorAll('.step')];
-    let i = 0;
-    const show = idx => steps.forEach((s,n)=>s.classList.toggle('active', n===idx));
-    document.getElementById('next1').onclick = ()=>{ if(document.getElementById('entity').value) { i=1; show(i);} };
-    document.getElementById('back2').onclick = ()=>{ i=0; show(i); };
-    document.getElementById('next2').onclick = ()=>{ if(document.getElementById('industry').value) { i=2; show(i);} };
-    document.getElementById('back3').onclick = ()=>{ i=1; show(i); };
-    document.getElementById('next3').onclick = ()=>{ if(document.getElementById('city').value) { i=3; show(i);} };
-    document.getElementById('back4').onclick = ()=>{ i=2; show(i); };
+    // ===== Config (inline JSON for now; can be moved to /data/rules.json later) =====
+    const RULES = {
+      // Example structure: [Industry][Form] => { docs:[], fees:{...}, timeline, notes, caen:[{cod, title}] }
+      "IT & Software": {
+        "SRL": {
+          docs: [
+            "Act constitutiv SRL (model modern)",
+            "Dovadă sediu social (contract de comodat/chirie + adeverință ANAF, dacă e cazul)",
+            "Specimen semnătură administrator (dacă solicită ONRC)",
+            "Declarație pe proprie răspundere privind autorizarea (model 1)",
+            "Rezervare denumire firmă (dacă nu e încă făcută)",
+            "Acordul vecinilor/Asociației, dacă desfășori activitatea la bloc și este necesar"
+          ],
+          fees: {
+            "Taxe ONRC (estimativ)": 122,
+            "Rezervare denumire": 10,
+            "Redactare acte (opțional)": 150
+          },
+          timeline: "2–5 zile lucrătoare",
+          notes: "Pentru activități exclusiv remote (software / consultanță), de obicei nu e necesară autorizarea punctului de lucru.",
+          caen: [
+            {cod:"6201", title:"Activități de realizare a software-ului la comandă"},
+            {cod:"6202", title:"Consultanță și management IT"},
+            {cod:"6203", title:"Administrarea bazelor de date"},
+            {cod:"6312", title:"Portale web și servicii online"}
+          ]
+        },
+        "SRL-D": {
+          docs: [
+            "Act constitutiv SRL-D (cu facilități debutant)",
+            "Declarație privind îndeplinirea condițiilor de debutant",
+            "Dovadă sediu social",
+            "Rezervare denumire firmă"
+          ],
+          fees: {"Taxe ONRC (estimativ)": 100, "Consultanță opțional": 150},
+          timeline: "3–7 zile lucrătoare",
+          notes: "Verifică anual condițiile pentru păstrarea facilităților SRL-D.",
+          caen: [{cod:"6201", title:"Software la comandă"}, {cod:"6312", title:"Portale web"}]
+        },
+        "SA": {
+          docs: ["Act constitutiv SA", "Capital social minim conform legii", "Dovadă sediu"],
+          fees: {"Taxe ONRC (estimativ)": 370, "Publicare Monitorul Oficial": 100},
+          timeline: "7–14 zile lucrătoare",
+          notes: "Potrivit pentru companii mari cu mai mulți acționari.",
+          caen: [{cod:"6202", title:"Consultanță IT"}]
+        }
+      },
+      "Hospitality & Restaurants": {
+        "SRL": {
+          docs: [
+            "Act constitutiv SRL",
+            "Dovadă sediu/punct de lucru (contract + avize)",
+            "Aviz DSP (igienă) și DSV (dacă manipulezi produse de origine animală)",
+            "Acord de funcționare Primărie + aviz PSI",
+            "Autorizare punct de lucru la ANSVSA / Primărie, după caz"
+          ],
+          fees: {"Taxe ONRC (estimativ)": 122, "Avize locale (estimativ)": 300, "Consultanță opțional": 200},
+          timeline: "7–21 zile (în funcție de avize)",
+          notes: "Costurile variază mult în funcție de oraș și suprafață.",
+          caen: [
+            {cod:"5610", title:"Restaurante"},
+            {cod:"5621", title:"Take‑away"}
+          ]
+        },
+        "PFA": {
+          docs: ["Cerere înregistrare PFA", "Dovadă calificare/experiență", "Dovadă sediu"],
+          fees: {"Taxe ONRC (estimativ)": 90},
+          timeline: "3–10 zile",
+          notes: "Pentru servire publică, vei avea în continuare nevoie de avize sanitare.",
+          caen: [{cod:"5610", title:"Restaurante"}]
+        }
+      },
+      "Construction & Real Estate": {
+        "SRL": {
+          docs:["Act constitutiv","Dovadă sediu","Autorizare punct de lucru (dacă desfășori execuție)"],
+          fees:{"Taxe ONRC":122},
+          timeline:"5–10 zile",
+          notes:"Pentru lucrări efective, ai nevoie de autorizări suplimentare și responsabil tehnic.",
+          caen:[{cod:"4110", title:"Construcția clădirilor"},{cod:"4331", title:"Finisaje"}]
+        }
+      }
+    };
 
-    // --- load CAEN suggestions from /assets/caen.json (to add next) ---
-    fetch('assets/caen.json').then(r => r.json()).then(list => {
-      const dl = document.getElementById('caen-list');
-      list.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = `${item.code} — ${item.name}`;
-        dl.appendChild(opt);
+    // Optional city modifiers (fees/notes deltas)
+    const CITY_MOD = {
+      "Bucharest": { feesDelta: {"Avize locale (estimativ)": +150}, notesAdd: "În București, programările pot dura mai mult; recomandăm depunere online unde e posibil." },
+      "Cluj-Napoca": { notesAdd: "Cluj acceptă frecvent dosare online pentru avize locale." }
+    };
+
+    // ===== Helpers =====
+    const $ = s => document.querySelector(s);
+    const fmtMoney = n => `${Number(n).toFixed(0)} RON`;
+
+    function getSelection(){
+      // Read from localStorage (populated by index.html in your site)
+      const industry = localStorage.getItem('selectedIndustry') || 'IT & Software';
+      const city = localStorage.getItem('selectedCity') || 'Bucharest';
+      const form = localStorage.getItem('selectedForm') || 'SRL';
+      return {industry, city, form};
+    }
+
+    function applyContextUI(ctx){
+      $('#valIndustry').textContent = ctx.industry;
+      $('#valCity').textContent = ctx.city;
+      $('#valForm').textContent = ctx.form;
+      $('#contextPill').textContent = `Selection: ${ctx.industry} · ${ctx.city} · ${ctx.form}`;
+    }
+
+    function loadRule(ctx){
+      const ind = RULES[ctx.industry] || RULES['IT & Software'];
+      const rule = ind[ctx.form] || Object.values(ind)[0];
+
+      // Docs
+      const ul = $('#docList');
+      ul.innerHTML = '';
+      rule.docs.forEach((d, i)=>{
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox" id="c${i}"> <label for="c${i}">${d}</label>`;
+        ul.appendChild(li);
       });
-    }).catch(()=>{ /* fine if file not present yet */ });
 
-    // --- submit to Google Apps Script endpoint (we’ll set up next) ---
-    document.getElementById('wizard').addEventListener('submit', async (e)=>{
+      // Fees
+      const feesBox = $('#feesBox');
+      feesBox.innerHTML = '';
+      const fees = {...rule.fees};
+      const cityDelta = CITY_MOD[ctx.city];
+      if(cityDelta && cityDelta.feesDelta){
+        for(const k in cityDelta.feesDelta){
+          fees[k] = (fees[k] || 0) + cityDelta.feesDelta[k];
+        }
+      }
+      Object.entries(fees).forEach(([k,v])=>{
+        const el = document.createElement('div');
+        el.className = 'fee-item';
+        el.innerHTML = `<div class="t"><strong>${k}</strong><span>${fmtMoney(v)}</span></div>`;
+        feesBox.appendChild(el);
+      });
+
+      // Timeline & notes
+      $('#timelineTag').textContent = `Timeline: ${rule.timeline}`;
+      let notes = rule.notes || '';
+      if(cityDelta && cityDelta.notesAdd){ notes += (notes? ' ' : '') + cityDelta.notesAdd; }
+      $('#notes').textContent = notes || '—';
+
+      // CAEN suggestions
+      const caenBox = $('#caenBox');
+      caenBox.innerHTML = '';
+      (rule.caen||[]).forEach(c=>{
+        const div = document.createElement('div');
+        div.className = 'fee-item';
+        div.innerHTML = `<div class="t"><strong>${c.cod}</strong><span>${c.title}</span></div>`;
+        caenBox.appendChild(div);
+      });
+    }
+
+    function openMailTo(subject, body){
+      const mail = 'contact@donefiles.com'; // TODO: replace with your real email
+      window.location.href = `mailto:${mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function buildSummaryText(ctx){
+      const docs = [...document.querySelectorAll('#docList label')].map(x=>`- ${x.textContent}`).join('\n');
+      const fees = [...document.querySelectorAll('#feesBox .t')].map(x=>{
+        const [k, v] = x.textContent.split(/(?=\d)/);
+        return `- ${k.trim()}: ${v.trim()}`;
+      }).join('\n');
+      const notes = $('#notes').textContent.trim();
+      return `Selection:\nIndustry: ${ctx.industry}\nCity: ${ctx.city}\nForm: ${ctx.form}\n\nRequired documents:\n${docs}\n\nFees:\n${fees}\n\nTimeline: ${$('#timelineTag').textContent.replace('Timeline: ','')}\nNotes: ${notes}`;
+    }
+
+    // ===== Init =====
+    const ctx = getSelection();
+    applyContextUI(ctx);
+    loadRule(ctx);
+
+    // UI events
+    $('#printBtn').addEventListener('click', ()=> window.print());
+    $('#changeSelectionBtn').addEventListener('click', ()=>{
+      // Simple redirect back to your main page (adjust path if needed)
+      window.location.href = 'index.html';
+    });
+    $('#orderBtn').addEventListener('click', ()=>{
+      const text = buildSummaryText(ctx) + "\n\nI want the Done‑For‑You service.";
+      openMailTo('Order — Done‑For‑You', text);
+    });
+    $('#contactBtn').addEventListener('click', (e)=>{
       e.preventDefault();
-      const payload = {
-        entity: document.getElementById('entity').value,
-        industry: document.getElementById('industry').value,
-        caen: document.getElementById('caen').value,
-        city: document.getElementById('city').value,
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value
-      };
-      try {
-        const r = await fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
-          method:'POST',
-          mode:'no-cors', // Apps Script often needs this; response may be opaque
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-      } catch(e){}
-      document.getElementById('result').style.display='block';
-      document.getElementById('result').textContent = 'Got it! We\'ll email you a checklist shortly.';
-const qs = new URLSearchParams(payload).toString();
-location.href = 'results.html?' + qs;
-
-      e.target.reset();
-      i = 0; show(i);
+      const text = buildSummaryText(ctx) + "\n\nQuestion:";
+      openMailTo('Question about setup', text);
+    });
+    $('#emailBtn').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const text = buildSummaryText(ctx);
+      openMailTo('My setup summary', text);
     });
   </script>
 </body>
