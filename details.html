@@ -911,12 +911,9 @@
 
     const container = document.getElementById("caenContainer");
 
-const savedIndustry = localStorage.getItem('selectedIndustry');
-if (savedIndustry) {
-  renderCAEN(savedIndustry); 
-} else {
-  renderCAEN(); 
-}
+ function renderCAEN(query = "") {
+      container.innerHTML = "";
+      const lowerQuery = query.toLowerCase();
 
       caenData.forEach(section => {
         const sectionCard = document.createElement("div");
@@ -975,7 +972,13 @@ if (savedIndustry) {
     });
 
     // Initial render
-    renderCAEN();
+const savedIndustry = localStorage.getItem('selectedIndustry');
+if (savedIndustry) {
+  renderCAEN(savedIndustry); // filter by industry
+} else {
+  renderCAEN(); // fallback to all
+}
+
   </script>
 </body>
 </html>
