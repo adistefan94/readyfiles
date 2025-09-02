@@ -908,59 +908,68 @@
 }
  
     ];
+ function renderCAEN(query = "") {
+      container.innerHTML = "";
+      const lowerQuery = query.toLowerCase();
 
-    const container = document.getElementById("caenContainer");
-function renderCAEN(filterIndustry = null) {
-  container.innerHTML = "";
+      caenData.forEach(section => {
+        const sectionCard = document.createElement("div");
+        sectionCard.className = "accordion-section";
 
-  // if we have a filter from localStorage
-  let filteredData = caenData;
-  if (filterIndustry) {
-    filteredData = caenData.filter(section =>
-      section.sectiune.toLowerCase().includes(filterIndustry.toLowerCase()) ||
-      section.diviziune.toLowerCase().includes(filterIndustry.toLowerCase())
-    );
-  }
+        const sectionHeader = document.createElement("div");
+        sectionHeader.className = "accordion-header";
+        sectionHeader.textContent = section.sectiune;
+        sectionHeader.onclick = () => {
+          sectionContent.style.display = sectionContent.style.display === "block" ? "none" : "block";
+        };
 
-  // render filtered or all
-  filteredData.forEach(section => {
-    const sectionCard = document.createElement("div");
-    sectionCard.className = "section-card";
+        const sectionContent = document.createElement("div");
+        sectionContent.className = "accordion-content";
 
-    const sectionTitle = document.createElement("h2");
-    sectionTitle.textContent = section.sectiune;
-    sectionCard.appendChild(sectionTitle);
+        // Division
+        const division = document.createElement("div");
+        division.className = "division";
+        const divHeader = document.createElement("h3");
+        divHeader.textContent = section.diviziune;
+        divHeader.onclick = () => {
+          divContent.style.display = divContent.style.display === "block" ? "none" : "block";
+        };
 
-    const division = document.createElement("div");
-    division.className = "division";
+        const divContent = document.createElement("div");
+        divContent.className = "division-content";
 
-    const divisionTitle = document.createElement("h3");
-    divisionTitle.textContent = section.diviziune;
-    division.appendChild(divisionTitle);
+        const ul = document.createElement("ul");
+        ul.className = "class-list";
 
-    const ul = document.createElement("ul");
-    ul.className = "class-list";
+        section.clase.forEach(cl => {
+          let name = cl.denumire;
+          let code = cl.cod;
+          if (lowerQuery && (name.toLowerCase().includes(lowerQuery) || code.includes(lowerQuery))) {
+            name = name.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+            code = code.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+          }
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${code}</strong> - ${name}`;
+          ul.appendChild(li);
+        });
 
-    section.clase.forEach(clasa => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${clasa.cod}</strong> - ${clasa.denumire}`;
-      ul.appendChild(li);
+        divContent.appendChild(ul);
+        division.appendChild(divHeader);
+        division.appendChild(divContent);
+        sectionContent.appendChild(division);
+
+        sectionCard.appendChild(sectionHeader);
+        sectionCard.appendChild(sectionContent);
+        container.appendChild(sectionCard);
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      renderCAEN(e.target.value);
     });
 
-    division.appendChild(ul);
-    sectionCard.appendChild(division);
-    container.appendChild(sectionCard);
-  });
-}
-
-// get selection from localStorage
-const selectedIndustry = localStorage.getItem('selectedIndustry');
-
-// call renderer with filter if we have one
-if (selectedIndustry) {
-  renderCAEN(selectedIndustry);
-} else {
-  renderCAEN(); // fallback to all
+    // Initial render
+    renderCAEN();
   </script>
 </body>
 </html>
