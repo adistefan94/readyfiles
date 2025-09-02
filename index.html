@@ -141,38 +141,33 @@
     <p>About Us | Contact | Legal | Terms of Service</p>
   </footer>
   <script>
- <script>
   // Accordion toggle
-  const acc = document.querySelectorAll(".accordion");
-  acc.forEach(btn => {
-    btn.addEventListener("click", function () {
-      this.classList.toggle("active");
-      const panel = this.nextElementSibling;
-      if (panel) {
-        panel.style.display = panel.style.display === "block" ? "none" : "block";
-      }
+    const acc = document.querySelectorAll(".accordion");
+    acc.forEach(btn => {
+      btn.addEventListener("click", function () {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        if(panel){
+          panel.style.display = panel.style.display === "block" ? "none" : "block";
+        }
+      });
     });
-  });
 
-  // Store selections in localStorage + redirect
-  function selectOption(type, value, subValue = null) {
-    if (type === 'city') {
-      localStorage.setItem('selectedCity', value);
-      // no alert anymore
-      return;
-    }
-
-    if (type === 'industry') {
-      localStorage.setItem('selectedIndustry', value);
-      if (subValue) {
-        localStorage.setItem('selectedForm', subValue);
-
-        // ✅ go straight to the wizard
-        window.location.href = 'wizard.html';
+    // Store selections in localStorage
+    function selectOption(type, value, subValue = null){
+      if(type === 'city'){
+        localStorage.setItem('selectedCity', value);
+        alert('City selected: ' + value);
+      }
+      if(type === 'industry'){
+        localStorage.setItem('selectedIndustry', value);
+        if(subValue){
+          localStorage.setItem('selectedForm', subValue);
+          window.location.href = "details.html";
+        }
       }
     }
-  }
-</script>
+  </script>
   <script>
   function fillCaen(text){
     const q = document.getElementById('caenQuery');
