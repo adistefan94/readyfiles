@@ -157,6 +157,9 @@
       } catch(e){}
       document.getElementById('result').style.display='block';
       document.getElementById('result').textContent = 'Got it! We\'ll email you a checklist shortly.';
+const qs = new URLSearchParams(payload).toString();
+location.href = 'results.html?' + qs;
+
       e.target.reset();
       i = 0; show(i);
     });
