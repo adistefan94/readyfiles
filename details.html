@@ -66,6 +66,14 @@
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Caută activitate sau cod CAEN...">
     </div>
+<div id="filterBanner" style="display:none; margin:10px 0 14px;">
+  <span style="background:#FFD700;color:#000;padding:6px 10px;border-radius:8px;margin-right:10px;font-weight:600;">
+    Showing CAEN related to: <span id="filterName"></span>
+  </span>
+  <button id="clearFilterBtn" style="padding:6px 10px;border-radius:8px;border:0;background:#2a3a74;color:#fff;cursor:pointer;">
+    Show all CAEN
+  </button>
+</div>
 
     <div id="caenContainer"></div>
 
