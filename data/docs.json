@@ -1,10 +1,26 @@
 [
   {
-    "title": "Act constitutiv SRL",
+    "title": "Act constitutiv SRL (model)",
     "file": "/assets/docs/act_constitutiv_srl.pdf",
     "forms": ["SRL"],
-    "industries": ["IT & Software", "Hospitality & Restaurants"],
-    "caen_prefix": ["62","63"],
-    "tags": ["obligatory","core"]
+    "industries": ["IT & Software", "Hospitality & Restaurants", "Construction & Real Estate"],
+    "caen_prefix": ["62", "63", "56", "41", "43"],
+    "tags": ["obligatory", "core"]
+  },
+  {
+    "title": "Declarație pe proprie răspundere",
+    "file": "/assets/docs/declaratie_pe_own_raspundere.pdf",
+    "forms": ["SRL", "PFA"],
+    "industries": ["*"],
+    "caen_prefix": ["*"],
+    "tags": ["general", "mandatory"]
+  },
+  {
+    "title": "Cerere înregistrare PFA",
+    "file": "/assets/docs/cerere_inregistrare_pfa.pdf",
+    "forms": ["PFA"],
+    "industries": ["Agriculture", "IT & Software", "Hospitality & Restaurants"],
+    "caen_prefix": ["01", "62", "56"],
+    "tags": ["pfa", "core"]
   }
 ]
