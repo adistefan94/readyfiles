@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Act constitutiv SRL",
+    "file": "/assets/docs/act_constitutiv_srl.pdf",
+    "forms": ["SRL"],
+    "industries": ["IT & Software", "Hospitality & Restaurants"],
+    "caen_prefix": ["62","63"],
+    "tags": ["obligatory","core"]
+  }
+]
