@@ -914,6 +914,15 @@
   ]
 }
 ]
+    <script>
+  const INDUSTRY_PREFIXES = {
+    "IT & Software": ["58","61","62","63"],
+    "Hospitality & Restaurants": ["55","56"],
+    "Construction & Real Estate": ["41","42","43"],
+    "Transport & Logistics": ["49","50","51","52","53"],
+    "Agriculture": ["01","02","03"]
+  };
+
     const container = document.getElementById("caenContainer");
 
     function renderCAEN(query = "") {
