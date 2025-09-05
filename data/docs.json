@@ -1,7 +1,7 @@
 [
   {
     "title": "Act constitutiv SRL (model)",
-    "file": "/assets/docs/act_constitutiv_srl.pdf",
+    "file": "/assets/act_constitutiv_srl.pdf",
     "forms": ["SRL"],
     "industries": ["IT & Software", "Hospitality & Restaurants", "Construction & Real Estate"],
     "caen_prefix": ["62", "63", "56", "41", "43"],
