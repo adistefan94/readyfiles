@@ -922,14 +922,130 @@
   ]
 }
 ]
-    <script>
-  const INDUSTRY_PREFIXES = {
-    "IT & Software": ["58","61","62","63"],
-    "Hospitality & Restaurants": ["55","56"],
-    "Construction & Real Estate": ["41","42","43"],
-    "Transport & Logistics": ["49","50","51","52","53"],
-    "Agriculture": ["01","02","03"]
-  };
+ <script>
+/* ----------------------------
+   Accent/case-insensitive utils
+----------------------------- */
+function norm(s) {
+  return (s || "")
+    .toString()
+    .normalize("NFD")               // split accents
+    .replace(/[\u0300-\u036f]/g, "")// remove accents
+    .toLowerCase()
+    .trim();
+}
+
+/* -----------------------------------------
+   Canonical industry names and their aliases
+   (add more synonyms freely)
+------------------------------------------ */
+const INDUSTRY_ALIASES = {
+  "it & software": [
+    "it", "it software", "software", "programare", "dezvoltare software",
+    "informatii si comunicatii", "informatii", "tehnologie", "tehnologia informatiei",
+    "it & software", "it/software", "informatica", "it consulting", "consultanta it"
+  ],
+  "hospitality & restaurants": [
+    "hospitality", "restaurants", "restaurant", "restaurante", "horeca",
+    "alimentatie", "alimentatie publica", "mancare", "cafenea", "coffee shop",
+    "bar", "pub", "catering", "take away", "take-away", "hotel", "hoteluri",
+    "ospitalitate", "food", "food service", "bistro"
+  ],
+  "construction & real estate": [
+    "constructii", "construcții", "constructie", "constructia",
+    "real estate", "imobiliare", "dezvoltare imobiliara", "dezvoltatori",
+    "santier", "amenajari", "finisaje", "antrepriza", "rezidential", "office"
+  ],
+  "transport & logistics": [
+    "transport", "transporturi", "logistics", "logistica",
+    "curierat", "marfa", "marfuri", "depozit", "depozitare", "warehousing",
+    "soferi", "flota", "cargo"
+  ],
+  "agriculture": [
+    "agricultura", "agricultură", "ferma", "fermier", "cultivare",
+    "silvicultura", "pescuit", "zootehnie", "agro", "horticultura", "viticultura"
+  ]
+};
+
+/* -----------------------------------------
+   Canonical industry -> CAEN prefixes
+   (extend if you need)
+------------------------------------------ */
+const INDUSTRY_PREFIXES = {
+  "it & software":               ["58","61","62","63"],
+  "hospitality & restaurants":   ["55","56"],
+  "construction & real estate":  ["41","42","43","68"],
+  "transport & logistics":       ["49","50","51","52","53"],
+  "agriculture":                 ["01","02","03"]
+};
+
+/* -----------------------------------------
+   Resolve any input string to a canonical key
+------------------------------------------ */
+function resolveIndustry(raw) {
+  const n = norm(raw);
+  if (!n) return null;
+
+  // 1) direct match to canonical keys
+  for (const canonical of Object.keys(INDUSTRY_ALIASES)) {
+    if (n === norm(canonical)) return canonical;
+  }
+  // 2) match against aliases
+  for (const [canonical, aliases] of Object.entries(INDUSTRY_ALIASES)) {
+    if (aliases.some(a => norm(a) === n)) return canonical;
+  }
+  // 3) fuzzy contains (helps with “it srl”, “restaurante srl” etc.)
+  for (const [canonical, aliases] of Object.entries(INDUSTRY_ALIASES)) {
+    if (n.includes(norm(canonical)) || aliases.some(a => n.includes(norm(a)))) {
+      return canonical;
+    }
+  }
+  return null;
+}
+
+/* -----------------------------------------
+   Filter helpers (structure-preserving)
+------------------------------------------ */
+function filterDataByPrefixes(fullData, prefixes) {
+  if (!prefixes || prefixes.length === 0) return fullData;
+  const keep = (code) => prefixes.some(p => code.startsWith(p));
+  return fullData
+    .map(sec => {
+      const kept = sec.clase.filter(c => keep(c.cod));
+      return kept.length ? { ...sec, clase: kept } : null;
+    })
+    .filter(Boolean);
+}
+
+function applyIndustryFilterIfAny(fullData) {
+  const stored = localStorage.getItem("selectedIndustry");
+  const canonical = resolveIndustry(stored);
+  const prefixes = canonical ? INDUSTRY_PREFIXES[canonical] : null;
+
+  const banner = document.getElementById("filterBanner");
+  const nameEl = document.getElementById("filterName");
+
+  if (!canonical || !prefixes) {
+    if (banner) banner.style.display = "none";
+    return { data: fullData, active: false, name: "" };
+  }
+
+  const filtered = filterDataByPrefixes(fullData, prefixes);
+  const hasAny = filtered.some(sec => sec.clase && sec.clase.length);
+
+  if (hasAny) {
+    if (banner) {
+      banner.style.display = "block";
+      nameEl.textContent = stored || canonical; // show what user picked
+    }
+    return { data: filtered, active: true, name: canonical };
+  } else {
+    if (banner) banner.style.display = "none";
+    return { data: fullData, active: false, name: "" };
+  }
+}
+</script>
+
 
     const container = document.getElementById("caenContainer");
 
