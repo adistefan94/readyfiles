@@ -923,206 +923,155 @@
 }
 ]
  <script>
-/* ----------------------------
-   Accent/case-insensitive utils
------------------------------ */
-function norm(s) {
-  return (s || "")
-    .toString()
-    .normalize("NFD")               // split accents
-    .replace(/[\u0300-\u036f]/g, "")// remove accents
-    .toLowerCase()
-    .trim();
-}
-
-/* -----------------------------------------
-   Canonical industry names and their aliases
-   (add more synonyms freely)
------------------------------------------- */
-const INDUSTRY_ALIASES = {
-  "it & software": [
-    "it", "it software", "software", "programare", "dezvoltare software",
-    "informatii si comunicatii", "informatii", "tehnologie", "tehnologia informatiei",
-    "it & software", "it/software", "informatica", "it consulting", "consultanta it"
-  ],
-  "hospitality & restaurants": [
-    "hospitality", "restaurants", "restaurant", "restaurante", "horeca",
-    "alimentatie", "alimentatie publica", "mancare", "cafenea", "coffee shop",
-    "bar", "pub", "catering", "take away", "take-away", "hotel", "hoteluri",
-    "ospitalitate", "food", "food service", "bistro"
-  ],
-  "construction & real estate": [
-    "constructii", "construcții", "constructie", "constructia",
-    "real estate", "imobiliare", "dezvoltare imobiliara", "dezvoltatori",
-    "santier", "amenajari", "finisaje", "antrepriza", "rezidential", "office"
-  ],
-  "transport & logistics": [
-    "transport", "transporturi", "logistics", "logistica",
-    "curierat", "marfa", "marfuri", "depozit", "depozitare", "warehousing",
-    "soferi", "flota", "cargo"
-  ],
-  "agriculture": [
-    "agricultura", "agricultură", "ferma", "fermier", "cultivare",
-    "silvicultura", "pescuit", "zootehnie", "agro", "horticultura", "viticultura"
-  ]
-};
-
-/* -----------------------------------------
-   Canonical industry -> CAEN prefixes
-   (extend if you need)
------------------------------------------- */
-const INDUSTRY_PREFIXES = {
-  "it & software":               ["58","61","62","63"],
-  "hospitality & restaurants":   ["55","56"],
-  "construction & real estate":  ["41","42","43","68"],
-  "transport & logistics":       ["49","50","51","52","53"],
-  "agriculture":                 ["01","02","03"]
-};
-
-/* -----------------------------------------
-   Resolve any input string to a canonical key
------------------------------------------- */
-function resolveIndustry(raw) {
-  const n = norm(raw);
-  if (!n) return null;
-
-  // 1) direct match to canonical keys
-  for (const canonical of Object.keys(INDUSTRY_ALIASES)) {
-    if (n === norm(canonical)) return canonical;
+<script>
+(function(){
+  // --- normalizare fără diacritice, case-insensitive
+  function norm(s){
+    return (s||"").toString()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .toLowerCase().trim();
   }
-  // 2) match against aliases
-  for (const [canonical, aliases] of Object.entries(INDUSTRY_ALIASES)) {
-    if (aliases.some(a => norm(a) === n)) return canonical;
-  }
-  // 3) fuzzy contains (helps with “it srl”, “restaurante srl” etc.)
-  for (const [canonical, aliases] of Object.entries(INDUSTRY_ALIASES)) {
-    if (n.includes(norm(canonical)) || aliases.some(a => n.includes(norm(a)))) {
-      return canonical;
+
+  // --- sinonime EN/RO -> cheie canonică
+  const INDUSTRY_ALIASES = {
+    "it & software": [
+      "it","it software","software","programare","dezvoltare software","informatii",
+      "informații","informatii si comunicatii","tehnologie","tehnologia informatiei",
+      "it consulting","consultanta it","informatica"
+    ],
+    "hospitality & restaurants": [
+      "hospitality","horeca","restaurants","restaurant","restaurante","alimentatie",
+      "alimentație","alimentatie publica","mancare","cafenea","coffee shop","bar",
+      "pub","catering","take away","take-away","hotel","hoteluri","ospitalitate","bistro"
+    ],
+    "construction & real estate": [
+      "constructii","construcții","constructie","constructia","real estate","imobiliare",
+      "dezvoltare imobiliara","amenajari","finisaje","santier","antrepriza","rezidential","office"
+    ],
+    "transport & logistics": [
+      "transport","transporturi","logistics","logistica","curierat","marfa","marfuri",
+      "depozit","depozitare","warehousing","soferi","flota","cargo"
+    ],
+    "agriculture": [
+      "agricultura","agricultură","ferma","fermier","cultivare","silvicultura",
+      "pescuit","zootehnie","agro","horticultura","viticultura"
+    ]
+  };
+
+  // --- industrie canonică -> prefixe CAEN
+  const INDUSTRY_PREFIXES = {
+    "it & software":              ["58","61","62","63"],
+    "hospitality & restaurants":  ["55","56"],
+    "construction & real estate": ["41","42","43","68"],
+    "transport & logistics":      ["49","50","51","52","53"],
+    "agriculture":                ["01","02","03"]
+  };
+
+  function resolveCanonical(raw){
+    const n = norm(raw);
+    if(!n) return null;
+    // 1) match direct pe cheile canonice
+    for(const k of Object.keys(INDUSTRY_ALIASES)){ if(n===norm(k)) return k; }
+    // 2) match pe sinonime
+    for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
+      if(arr.some(a => norm(a)===n)) return k;
     }
-  }
-  return null;
-}
-
-/* -----------------------------------------
-   Filter helpers (structure-preserving)
------------------------------------------- */
-function filterDataByPrefixes(fullData, prefixes) {
-  if (!prefixes || prefixes.length === 0) return fullData;
-  const keep = (code) => prefixes.some(p => code.startsWith(p));
-  return fullData
-    .map(sec => {
-      const kept = sec.clase.filter(c => keep(c.cod));
-      return kept.length ? { ...sec, clase: kept } : null;
-    })
-    .filter(Boolean);
-}
-
-function applyIndustryFilterIfAny(fullData) {
-  const stored = localStorage.getItem("selectedIndustry");
-  const canonical = resolveIndustry(stored);
-  const prefixes = canonical ? INDUSTRY_PREFIXES[canonical] : null;
-
-  const banner = document.getElementById("filterBanner");
-  const nameEl = document.getElementById("filterName");
-
-  if (!canonical || !prefixes) {
-    if (banner) banner.style.display = "none";
-    return { data: fullData, active: false, name: "" };
-  }
-
-  const filtered = filterDataByPrefixes(fullData, prefixes);
-  const hasAny = filtered.some(sec => sec.clase && sec.clase.length);
-
-  if (hasAny) {
-    if (banner) {
-      banner.style.display = "block";
-      nameEl.textContent = stored || canonical; // show what user picked
+    // 3) conține fragmente utile (ex: "it srl", "restaurante pfa")
+    for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
+      if(n.includes(norm(k)) || arr.some(a => n.includes(norm(a)))) return k;
     }
-    return { data: filtered, active: true, name: canonical };
-  } else {
-    if (banner) banner.style.display = "none";
-    return { data: fullData, active: false, name: "" };
+    return null;
   }
-}
-</script>
 
+  function getSelectedIndustry(){
+    const q = new URLSearchParams(location.search).get("industry");
+    const fromURL = q && q.trim() ? q : null;
+    return fromURL || localStorage.getItem("selectedIndustry") || "";
+  }
 
-    const container = document.getElementById("caenContainer");
-
-    function renderCAEN(query = "") {
-      container.innerHTML = "";
-      const lowerQuery = query.toLowerCase();
-
-      caenData.forEach(section => {
-        const sectionCard = document.createElement("div");
-        sectionCard.className = "accordion-section";
-
-        const sectionHeader = document.createElement("div");
-        sectionHeader.className = "accordion-header";
-        sectionHeader.textContent = section.sectiune;
-        sectionHeader.onclick = () => {
-          sectionContent.style.display = sectionContent.style.display === "block" ? "none" : "block";
-        };
-
-        const sectionContent = document.createElement("div");
-        sectionContent.className = "accordion-content";
-
-        // Division
-        const division = document.createElement("div");
-        division.className = "division";
-        const divHeader = document.createElement("h3");
-        divHeader.textContent = section.diviziune;
-        divHeader.onclick = () => {
-          divContent.style.display = divContent.style.display === "block" ? "none" : "block";
-        };
-
-        const divContent = document.createElement("div");
-        divContent.className = "division-content";
-
-        const ul = document.createElement("ul");
-        ul.className = "class-list";
-
-        section.clase.forEach(cl => {
-          let name = cl.denumire;
-          let code = cl.cod;
-          if (lowerQuery && (name.toLowerCase().includes(lowerQuery) || code.includes(lowerQuery))) {
-            name = name.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
-            code = code.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
-          }
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${code}</strong> - ${name}`;
-
-          // Make CAEN clickable → save & redirect
-          li.addEventListener("click", () => {
-            localStorage.setItem('selectedCaen', code + ' - ' + cl.denumire);
-            window.location.href = 'wizard.html';
-          });
-
-          ul.appendChild(li);
-        });
-
-        divContent.appendChild(ul);
-        division.appendChild(divHeader);
-        division.appendChild(divContent);
-        sectionContent.appendChild(division);
-
-        sectionCard.appendChild(sectionHeader);
-        sectionCard.appendChild(sectionContent);
-        container.appendChild(sectionCard);
+  function ensureBanner(on, name){
+    let banner = document.getElementById("filterBanner");
+    if(!banner){
+      banner = document.createElement("div");
+      banner.id = "filterBanner";
+      banner.style.cssText = "display:none;margin:10px 0 14px;";
+      banner.innerHTML =
+        "<span style='background:#FFD700;color:#000;padding:6px 10px;border-radius:8px;margin-right:10px;font-weight:600;'>"+
+        "Showing CAEN related to: <span id='filterName'></span></span>"+
+        "<button id='clearFilterBtn' style='padding:6px 10px;border-radius:8px;border:0;background:#2a3a74;color:#fff;cursor:pointer;'>Show all CAEN</button>";
+      // inserează înaintea containerului
+      const container = document.getElementById("caenContainer") || document.body.firstElementChild;
+      if(container && container.parentNode){ container.parentNode.insertBefore(banner, container); }
+      banner.querySelector("#clearFilterBtn").addEventListener("click", ()=>{
+        // arată tot
+        document.querySelectorAll(".class-list li, .division, .accordion-section, .section-card, .card")
+          .forEach(el=> el.style.display = "");
+        banner.style.display = "none";
       });
     }
+    banner.style.display = on ? "block" : "none";
+    const nameEl = document.getElementById("filterName");
+    if(nameEl && name) nameEl.textContent = name;
+  }
 
-    document.getElementById("searchInput").addEventListener("input", e => {
-      renderCAEN(e.target.value);
-    });
+  function applyFilter(){
+    const raw = getSelectedIndustry();
+    const canonical = resolveCanonical(raw);
+    const prefixes = canonical ? INDUSTRY_PREFIXES[canonical] : null;
 
-    function selectNoCaen(){
-      localStorage.setItem('selectedCaen', 'None');
-      window.location.href = 'wizard.html';
+    // dacă nu avem nimic clar → nu filtra
+    if(!prefixes || prefixes.length===0){
+      ensureBanner(false);
+      return;
     }
 
-    // Initial render
-    renderCAEN();
+    const items = document.querySelectorAll(".class-list li");
+    if(items.length===0){ return; } // încă nu s-a randat lista
+
+    const keep = code => prefixes.some(p => code.startsWith(p));
+    let kept = 0;
+
+    // 1) ascunde/arată codurile
+    items.forEach(li=>{
+      // se așteaptă formatul: "<strong>5610</strong> - Restaurante"
+      const text = li.textContent.trim();
+      const m = text.match(/^(\d{2,4})/);
+      if(m && keep(m[1])){ li.style.display=""; kept++; } else { li.style.display="none"; }
+    });
+
+    // 2) ascunde diviziunile fără clase vizibile
+    document.querySelectorAll(".division").forEach(div=>{
+      const anyVisible = Array.from(div.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
+      div.style.display = anyVisible ? "" : "none";
+    });
+
+    // 3) ascunde secțiunile fără nimic vizibil
+    document.querySelectorAll(".accordion-section, .section-card, .card").forEach(sec=>{
+      const anyVisible = Array.from(sec.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
+      sec.style.display = anyVisible ? "" : "none";
+    });
+
+    // fallback: dacă n-a rămas nimic vizibil → arată tot
+    if(kept===0){
+      document.querySelectorAll(".class-list li, .division, .accordion-section, .section-card, .card")
+        .forEach(el=> el.style.display = "");
+      ensureBanner(false);
+    }else{
+      ensureBanner(true, raw || canonical);
+    }
+  }
+
+  // așteaptă să se construiască lista, apoi aplică filtrul
+  function waitAndApply(){
+    const ready = document.querySelectorAll(".class-list li").length > 0;
+    if(!ready){ setTimeout(waitAndApply, 100); return; }
+    applyFilter();
+  }
+
+  window.addEventListener("load", waitAndApply);
+})();
+</script>
+
   </script>
 </body>
 </html>
