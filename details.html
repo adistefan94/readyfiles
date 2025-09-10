@@ -7,11 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #fff; margin:0; }
-    header { padding: 1rem; background-color: #002f6c; color: white; }
+    header { margin-left:240px; padding: 1rem 2rem; background-color: #002f6c; color: white; position:relative; }
+    header h1 { font-family:'Oswald',sans-serif; margin:0; font-size:2rem; }
+    .subtitle-wrapper { overflow:hidden; height:1.5rem; position:relative; margin-top:6px; }
+    .subtitle-text { position:absolute; white-space:nowrap; animation: marqueeLoop 15s linear infinite; font-size:1rem; color:#FFD700; }
+    @keyframes marqueeLoop { 0% { left:100%; } 100% { left:-100%; } }
+
     .sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
     .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li { margin: 8px 0; cursor: pointer; }
+
     .main { margin-left: 240px; padding: 2rem; }
     .search-bar { margin-bottom: 20px; text-align: right; }
     .search-bar input { padding: 10px; width: 300px; border-radius: 6px; border: none; }
@@ -24,14 +30,20 @@
     .class-list { list-style: none; padding-left: 0; }
     .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; cursor: pointer; }
     .class-list li:hover { background: #3a4070; }
+    .class-list li[role="button"] { outline: none; }
     .no-caen { display:inline-block; margin:20px 0; padding:10px 16px; background:#FFD700; color:#000; border-radius:8px; cursor:pointer; font-weight:bold; }
     mark { background:#FFD700; color:#000; padding:0 2px; border-radius:3px; }
+
+    @media (max-width: 768px) {
+      .sidebar { position: static; width: 100%; height: auto; }
+      header, .main { margin-left: 0; }
+      header h1 { font-size: 1.5rem; }
+      .subtitle-text { font-size: 0.9rem; }
+      .search-bar { text-align: center; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>CAEN Codes Explorer</h1>
-  </header>
   <aside class="sidebar">
     <h3>Menu</h3>
     <ul>
@@ -43,6 +55,12 @@
       <li>Contact / Help</li>
     </ul>
   </aside>
+  <header>
+    <h1>Done Files Romania</h1>
+    <div class="subtitle-wrapper">
+      <div class="subtitle-text">simple solutions for opening your business - fast, reliable, done for you</div>
+    </div>
+  </header>
   <main class="main">
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Caută activitate sau cod CAEN...">
@@ -892,7 +910,7 @@
 }
  
     ];
-   const container = document.getElementById("caenContainer");
+    const container = document.getElementById("caenContainer");
 
     function renderCAEN(query="") {
       container.innerHTML = "";
@@ -940,6 +958,8 @@
           // show only matching when search is active
           if(!q || combined.includes(q)){
             const li = document.createElement("li");
+            li.setAttribute("role","button");
+            li.setAttribute("tabindex","0");
             li.innerHTML = `<strong>${code}</strong> - ${name}`;
             li.addEventListener("click", () => {
               localStorage.setItem('selectedCaen', cl.cod + ' - ' + cl.denumire);
@@ -966,7 +986,17 @@
       window.location.href = 'wizard.html';
     }
 
-    document.getElementById("searchInput").addEventListener("input", e => renderCAEN(e.target.value));
+    // debounce function to optimize search
+    function debounce(fn, delay){
+      let timer;
+      return function(...args){
+        clearTimeout(timer);
+        timer = setTimeout(()=> fn.apply(this,args), delay);
+      };
+    }
+
+    const debouncedRender = debounce((val)=> renderCAEN(val), 250);
+    document.getElementById("searchInput").addEventListener("input", e => debouncedRender(e.target.value));
 
     renderCAEN();
   </script>
