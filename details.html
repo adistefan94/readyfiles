@@ -17,9 +17,9 @@
     .sidebar ul li { margin: 8px 0; cursor: pointer; }
 
     .hero { margin-left: 230px; padding: 2rem; font-family: 'Oswald', sans-serif; }
-    .hero h1 { font-size: 3rem; color:#000000; }
+    .hero h1 { font-size: 3rem; color:#000; }
     .hero .subtitle-wrapper { overflow: hidden; height: 2rem; position: relative; font-family: monospace; }
-    .hero .subtitle-text { position: absolute; white-space: nowrap; animation: marqueeLoop 15s linear infinite; font-size: 1.3rem; color: #000000; }
+    .hero .subtitle-text { position: absolute; white-space: nowrap; animation: marqueeLoop 15s linear infinite; font-size: 1.3rem; color: #000; }
     @keyframes marqueeLoop { 0% { left: 100%; } 100% { left: -100%; } }
 
     .main { margin-left: 230px; padding: 2rem; }
@@ -919,7 +919,15 @@
 }
  
     ];
-      const container = document.getElementById("caenContainer");
+     const INDUSTRY_PREFIXES = {
+      "IT & Software": ["58","61","62","63"],
+      "Hospitality & Restaurants": ["55","56"],
+      "Construction & Real Estate": ["41","42","43","68"],
+      "Transport & Logistics": ["49","50","51","52","53"],
+      "Agriculture": ["01","02","03"]
+    };
+
+    const container = document.getElementById("caenContainer");
     const searchInput = document.getElementById("searchInput");
 
     function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
@@ -928,8 +936,19 @@
     const index = [];
 
     function buildDOM(){
+      const selectedIndustry = localStorage.getItem("selectedIndustry");
+      let dataToRender = caenData;
+
+      if(selectedIndustry && INDUSTRY_PREFIXES[selectedIndustry]){
+        const prefixes = INDUSTRY_PREFIXES[selectedIndustry];
+        dataToRender = caenData.map(sec => {
+          const classes = sec.clase.filter(c => prefixes.some(p => c.cod.startsWith(p)));
+          return { ...sec, clase: classes };
+        }).filter(sec => sec.clase.length > 0);
+      }
+
       const frag = document.createDocumentFragment();
-      caenData.forEach(section => {
+      dataToRender.forEach(section => {
         const sectionCard = document.createElement('div');
         sectionCard.className = 'accordion-section';
 
@@ -1047,3 +1066,4 @@
   </script>
 </body>
 </html>
+
