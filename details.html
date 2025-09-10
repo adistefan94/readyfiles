@@ -29,12 +29,10 @@
     .division-content { display: none; margin-left: 15px; }
 
     .class-list { list-style: none; padding-left: 0; }
-    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; cursor: pointer; }
+    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; }
     .class-list li:hover { background: #3a4070; }
 
     mark { background: #FFD700; color: black; padding: 0 2px; border-radius: 3px; }
-
-    .no-caen { display:inline-block; margin:20px 0; padding:10px 16px; background:#FFD700; color:#000; border-radius:8px; cursor:pointer; font-weight:bold; }
 
     @media (max-width: 768px) {
       .sidebar { position: static; width: 100%; height: auto; }
@@ -66,25 +64,12 @@
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Caută activitate sau cod CAEN...">
     </div>
-<div id="filterBanner" style="display:none; margin:10px 0 14px;">
-  <span style="background:#FFD700;color:#000;padding:6px 10px;border-radius:8px;margin-right:10px;font-weight:600;">
-    Showing CAEN related to: <span id="filterName"></span>
-  </span>
-  <button id="clearFilterBtn" style="padding:6px 10px;border-radius:8px;border:0;background:#2a3a74;color:#fff;cursor:pointer;">
-    Show all CAEN
-  </button>
-</div>
 
     <div id="caenContainer"></div>
-
-    <div style="margin-top:30px;">
-      <span class="no-caen" onclick="selectNoCaen()">Nu am CAEN (continuă fără)</span>
-    </div>
   </main>
-
   <script>
-   
-    const caenData =  [
+    // Include all CAEN data inline for GitHub compatibility
+    const caenData = [
   {
     "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
     "diviziune": "01 Agricultura, vânătoare și servicii anexe",
@@ -921,149 +906,71 @@
     {"cod": "9604", "denumire": "Alte activități de servicii pentru gospodării și uz personal n.c.a."}
   ]
 }
-]
  
-<script>
-(function(){
-  // --- normalizare fără diacritice, case-insensitive
-  function norm(s){
-    return (s||"").toString()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-      .toLowerCase().trim();
-  }
-  const INDUSTRY_ALIASES = {
-    "it & software": [
-      "it","it software","software","programare","dezvoltare software","informatii",
-      "informații","informatii si comunicatii","tehnologie","tehnologia informatiei",
-      "it consulting","consultanta it","informatica"
-    ],
-    "hospitality & restaurants": [
-      "hospitality","horeca","restaurants","restaurant","restaurante","alimentatie",
-      "alimentație","alimentatie publica","mancare","cafenea","coffee shop","bar",
-      "pub","catering","take away","take-away","hotel","hoteluri","ospitalitate","bistro"
-    ],
-    "construction & real estate": [
-      "constructii","construcții","constructie","constructia","real estate","imobiliare",
-      "dezvoltare imobiliara","amenajari","finisaje","santier","antrepriza","rezidential","office"
-    ],
-    "transport & logistics": [
-      "transport","transporturi","logistics","logistica","curierat","marfa","marfuri",
-      "depozit","depozitare","warehousing","soferi","flota","cargo"
-    ],
-    "agriculture": [
-      "agricultura","agricultură","ferma","fermier","cultivare","silvicultura",
-      "pescuit","zootehnie","agro","horticultura","viticultura"
-    ]
-  };
+    ];
+    const container = document.getElementById("caenContainer");
+ function renderCAEN(query = "") {
+      container.innerHTML = "";
+      const lowerQuery = query.toLowerCase();
 
- 
-  const INDUSTRY_PREFIXES = {
-    "it & software":              ["58","61","62","63"],
-    "hospitality & restaurants":  ["55","56"],
-    "construction & real estate": ["41","42","43","68"],
-    "transport & logistics":      ["49","50","51","52","53"],
-    "agriculture":                ["01","02","03"]
-  };
+      caenData.forEach(section => {
+        const sectionCard = document.createElement("div");
+        sectionCard.className = "accordion-section";
 
-  function resolveCanonical(raw){
-    const n = norm(raw);
-    if(!n) return null;
-    // 1) match direct pe cheile canonice
-    for(const k of Object.keys(INDUSTRY_ALIASES)){ if(n===norm(k)) return k; }
-    // 2) match pe sinonime
-    for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
-      if(arr.some(a => norm(a)===n)) return k;
-    }
-   
-    for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
-      if(n.includes(norm(k)) || arr.some(a => n.includes(norm(a)))) return k;
-    }
-    return null;
-  }
+        const sectionHeader = document.createElement("div");
+        sectionHeader.className = "accordion-header";
+        sectionHeader.textContent = section.sectiune;
+        sectionHeader.onclick = () => {
+          sectionContent.style.display = sectionContent.style.display === "block" ? "none" : "block";
+        };
 
-  function getSelectedIndustry(){
-    const q = new URLSearchParams(location.search).get("industry");
-    const fromURL = q && q.trim() ? q : null;
-    return fromURL || localStorage.getItem("selectedIndustry") || "";
-  }
+        const sectionContent = document.createElement("div");
+        sectionContent.className = "accordion-content";
 
-  function ensureBanner(on, name){
-    let banner = document.getElementById("filterBanner");
-    if(!banner){
-      banner = document.createElement("div");
-      banner.id = "filterBanner";
-      banner.style.cssText = "display:none;margin:10px 0 14px;";
-      banner.innerHTML =
-        "<span style='background:#FFD700;color:#000;padding:6px 10px;border-radius:8px;margin-right:10px;font-weight:600;'>"+
-        "Showing CAEN related to: <span id='filterName'></span></span>"+
-        "<button id='clearFilterBtn' style='padding:6px 10px;border-radius:8px;border:0;background:#2a3a74;color:#fff;cursor:pointer;'>Show all CAEN</button>";
-     
-      const container = document.getElementById("caenContainer") || document.body.firstElementChild;
-      if(container && container.parentNode){ container.parentNode.insertBefore(banner, container); }
-      banner.querySelector("#clearFilterBtn").addEventListener("click", ()=>{
-        // arată tot
-        document.querySelectorAll(".class-list li, .division, .accordion-section, .section-card, .card")
-          .forEach(el=> el.style.display = "");
-        banner.style.display = "none";
+        // Division
+        const division = document.createElement("div");
+        division.className = "division";
+        const divHeader = document.createElement("h3");
+        divHeader.textContent = section.diviziune;
+        divHeader.onclick = () => {
+          divContent.style.display = divContent.style.display === "block" ? "none" : "block";
+        };
+
+        const divContent = document.createElement("div");
+        divContent.className = "division-content";
+
+        const ul = document.createElement("ul");
+        ul.className = "class-list";
+
+        section.clase.forEach(cl => {
+          let name = cl.denumire;
+          let code = cl.cod;
+          if (lowerQuery && (name.toLowerCase().includes(lowerQuery) || code.includes(lowerQuery))) {
+            name = name.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+            code = code.replace(new RegExp(query, "gi"), match => `<mark>${match}</mark>`);
+          }
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${code}</strong> - ${name}`;
+          ul.appendChild(li);
+        });
+
+        divContent.appendChild(ul);
+        division.appendChild(divHeader);
+        division.appendChild(divContent);
+        sectionContent.appendChild(division);
+
+        sectionCard.appendChild(sectionHeader);
+        sectionCard.appendChild(sectionContent);
+        container.appendChild(sectionCard);
       });
     }
-    banner.style.display = on ? "block" : "none";
-    const nameEl = document.getElementById("filterName");
-    if(nameEl && name) nameEl.textContent = name;
-  }
 
-  function applyFilter(){
-    const raw = getSelectedIndustry();
-    const canonical = resolveCanonical(raw);
-    const prefixes = canonical ? INDUSTRY_PREFIXES[canonical] : null;
-
-    if(!prefixes || prefixes.length===0){
-      ensureBanner(false);
-      return;
-    }
-
-    const items = document.querySelectorAll(".class-list li");
-    if(items.length===0){ return; } 
-
-    const keep = code => prefixes.some(p => code.startsWith(p));
-    let kept = 0;
-
-    items.forEach(li=>{
-      
-      const text = li.textContent.trim();
-      const m = text.match(/^(\d{2,4})/);
-      if(m && keep(m[1])){ li.style.display=""; kept++; } else { li.style.display="none"; }
+    document.getElementById("searchInput").addEventListener("input", e => {
+      renderCAEN(e.target.value);
     });
 
-    document.querySelectorAll(".division").forEach(div=>{
-      const anyVisible = Array.from(div.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
-      div.style.display = anyVisible ? "" : "none";
-    });
-
-    document.querySelectorAll(".accordion-section, .section-card, .card").forEach(sec=>{
-      const anyVisible = Array.from(sec.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
-      sec.style.display = anyVisible ? "" : "none";
-    });
-
-    if(kept===0){
-      document.querySelectorAll(".class-list li, .division, .accordion-section, .section-card, .card")
-        .forEach(el=> el.style.display = "");
-      ensureBanner(false);
-    }else{
-      ensureBanner(true, raw || canonical);
-    }
-  }
-
-  function waitAndApply(){
-    const ready = document.querySelectorAll(".class-list li").length > 0;
-    if(!ready){ setTimeout(waitAndApply, 100); return; }
-    applyFilter();
-  }
-
-  window.addEventListener("load", waitAndApply);
-})();
-</script>
-
+    // Initial render
+    renderCAEN();
   </script>
 </body>
 </html>
