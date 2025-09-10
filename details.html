@@ -922,7 +922,7 @@
   ]
 }
 ]
- <script>
+ 
 <script>
 (function(){
   // --- normalizare fără diacritice, case-insensitive
@@ -931,8 +931,6 @@
       .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
       .toLowerCase().trim();
   }
-
-  // --- sinonime EN/RO -> cheie canonică
   const INDUSTRY_ALIASES = {
     "it & software": [
       "it","it software","software","programare","dezvoltare software","informatii",
@@ -958,7 +956,7 @@
     ]
   };
 
-  // --- industrie canonică -> prefixe CAEN
+ 
   const INDUSTRY_PREFIXES = {
     "it & software":              ["58","61","62","63"],
     "hospitality & restaurants":  ["55","56"],
@@ -976,7 +974,7 @@
     for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
       if(arr.some(a => norm(a)===n)) return k;
     }
-    // 3) conține fragmente utile (ex: "it srl", "restaurante pfa")
+   
     for(const [k, arr] of Object.entries(INDUSTRY_ALIASES)){
       if(n.includes(norm(k)) || arr.some(a => n.includes(norm(a)))) return k;
     }
@@ -999,7 +997,7 @@
         "<span style='background:#FFD700;color:#000;padding:6px 10px;border-radius:8px;margin-right:10px;font-weight:600;'>"+
         "Showing CAEN related to: <span id='filterName'></span></span>"+
         "<button id='clearFilterBtn' style='padding:6px 10px;border-radius:8px;border:0;background:#2a3a74;color:#fff;cursor:pointer;'>Show all CAEN</button>";
-      // inserează înaintea containerului
+     
       const container = document.getElementById("caenContainer") || document.body.firstElementChild;
       if(container && container.parentNode){ container.parentNode.insertBefore(banner, container); }
       banner.querySelector("#clearFilterBtn").addEventListener("click", ()=>{
@@ -1019,39 +1017,34 @@
     const canonical = resolveCanonical(raw);
     const prefixes = canonical ? INDUSTRY_PREFIXES[canonical] : null;
 
-    // dacă nu avem nimic clar → nu filtra
     if(!prefixes || prefixes.length===0){
       ensureBanner(false);
       return;
     }
 
     const items = document.querySelectorAll(".class-list li");
-    if(items.length===0){ return; } // încă nu s-a randat lista
+    if(items.length===0){ return; } 
 
     const keep = code => prefixes.some(p => code.startsWith(p));
     let kept = 0;
 
-    // 1) ascunde/arată codurile
     items.forEach(li=>{
-      // se așteaptă formatul: "<strong>5610</strong> - Restaurante"
+      
       const text = li.textContent.trim();
       const m = text.match(/^(\d{2,4})/);
       if(m && keep(m[1])){ li.style.display=""; kept++; } else { li.style.display="none"; }
     });
 
-    // 2) ascunde diviziunile fără clase vizibile
     document.querySelectorAll(".division").forEach(div=>{
       const anyVisible = Array.from(div.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
       div.style.display = anyVisible ? "" : "none";
     });
 
-    // 3) ascunde secțiunile fără nimic vizibil
     document.querySelectorAll(".accordion-section, .section-card, .card").forEach(sec=>{
       const anyVisible = Array.from(sec.querySelectorAll(".class-list li")).some(li => li.style.display!=="none");
       sec.style.display = anyVisible ? "" : "none";
     });
 
-    // fallback: dacă n-a rămas nimic vizibil → arată tot
     if(kept===0){
       document.querySelectorAll(".class-list li, .division, .accordion-section, .section-card, .card")
         .forEach(el=> el.style.display = "");
@@ -1061,7 +1054,6 @@
     }
   }
 
-  // așteaptă să se construiască lista, apoi aplică filtrul
   function waitAndApply(){
     const ready = document.querySelectorAll(".class-list li").length > 0;
     if(!ready){ setTimeout(waitAndApply, 100); return; }
