@@ -13,6 +13,9 @@
     .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li { margin: 8px 0; cursor: pointer; }
+    .sidebar ul li ul { display: none; margin-left: 15px; }
+    .sidebar ul li.active ul { display: block; }
+    .sidebar a { color: white; text-decoration: none; }
     .hero { margin-left: 230px; padding: 2rem; font-family: 'Oswald', sans-serif; }
     .hero h1 { font-size: 3rem; }
     .hero .subtitle-wrapper { overflow: hidden; height: 2rem; position: relative; font-family: monospace; }
@@ -48,7 +51,15 @@
       <li>Business Type Categories</li>
       <li>Document Checklist</li>
       <li>Useful Tools</li>
-      <li>Quick Links</li>
+      <li class="has-sub">Quick Links
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="details.html">CAEN Codes</a></li>
+          <li><a href="docs.html">Docs / Papers</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </li>
       <li>Language Switcher</li>
       <li>Contact / Help</li>
     </ul>
@@ -59,7 +70,7 @@
       <div class="subtitle-text">simple solutions for opening your business - fast, reliable, done for you</div>
     </div>
     <div class="search-bar">
-      <input type="text" placeholder="Search...">
+      <input type="text" id="globalSearch" placeholder="Search anything...">
     </div>
   </section>
   <section class="faq">
@@ -131,6 +142,13 @@
       });
     });
 
+    // Sidebar expand/collapse for Quick Links
+    document.querySelectorAll('.sidebar .has-sub').forEach(li => {
+      li.addEventListener('click', ()=>{
+        li.classList.toggle('active');
+      });
+    });
+
     // Store selections in localStorage
     function selectOption(type, value, subValue = null){
       if(type === 'city'){
@@ -145,6 +163,18 @@
         }
       }
     }
+
+    // Global search simulation
+    document.getElementById('globalSearch').addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        const query = e.target.value.toLowerCase();
+        if(query.includes('caen')) window.location.href = 'details.html';
+        else if(query.includes('doc')) window.location.href = 'docs.html';
+        else if(query.includes('faq')) window.location.href = 'faq.html';
+        else if(query.includes('contact')) window.location.href = 'contact.html';
+        else window.location.href = 'details.html';
+      }
+    });
   </script>
 </body>
 </html>
