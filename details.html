@@ -879,8 +879,32 @@ li.classList.toggle('active');
   ]
 }
    ];
-    
    const INDUSTRY_PREFIXES = {
+localStorage.setItem('selectedCaen', cl.cod + ' - ' + cl.denumire);
+window.location.href = 'wizard.html';
+};
+li.addEventListener('click', go);
+li.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+
+
+ul.appendChild(li);
+
+
+index.push({
+li,
+origCode: cl.cod,
+origName: cl.denumire,
+search: (cl.cod + ' ' + cl.denumire).toLowerCase(),
+divisionEl: division,
+sectionEl: sectionCard
+});
+});
+
+
+if(ul.children.length){
+divContent.appendChild(ul);
+division.appendChild(divHeader);
+division.appendChild(divContent);
 sectionContent.appendChild(division);
 sectionCard.appendChild(sectionHeader);
 sectionCard.appendChild(sectionContent);
