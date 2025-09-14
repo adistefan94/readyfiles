@@ -954,8 +954,15 @@
 
     function buildDOM(){
       index.length = 0; // clear index to avoid duplicates
-      const selectedIndustry = localStorage.getItem("selectedIndustry");
-      let dataToRender = caenData;
+      // Check if ?all=1 is in URL → show full CAEN list
+const params = new URLSearchParams(window.location.search);
+const showAll = params.get("all");
+
+let selectedIndustry = null;
+if (!showAll) {
+  selectedIndustry = localStorage.getItem("selectedIndustry");
+}
+     let dataToRender = caenData;
 
       if(selectedIndustry && INDUSTRY_PREFIXES[selectedIndustry]){
         const prefixes = INDUSTRY_PREFIXES[selectedIndustry];
