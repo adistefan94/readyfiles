@@ -1,85 +1,68 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAEN Codes Explorer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #000; }
-
-    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002f6c; color: white; }
-
-    .sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
-    .sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
-    .sidebar ul { list-style: none; padding: 0; }
-    .sidebar ul li { margin: 8px 0; cursor: pointer; }
-
-    .hero { margin-left: 230px; padding: 2rem; font-family: 'Oswald', sans-serif; }
-    .hero h1 { font-size: 3rem; color:#000; }
-    .hero .subtitle-wrapper { overflow: hidden; height: 2rem; position: relative; font-family: monospace; }
-    .hero .subtitle-text { position: absolute; white-space: nowrap; animation: marqueeLoop 15s linear infinite; font-size: 1.3rem; color: #000; }
-    @keyframes marqueeLoop { 0% { left: 100%; } 100% { left: -100%; } }
-
-    .main { margin-left: 230px; padding: 2rem; }
-    .search-bar { margin-bottom: 20px; text-align: right; }
-    .search-bar input { padding: 10px; width: 300px; border-radius: 6px; border: none; }
-
-    .accordion-section { background-color: #111836; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
-    .accordion-header { background-color: #4B004B; color: white; padding: 1rem; cursor: pointer; font-weight: bold; border-bottom: 1px solid #333; }
-    .accordion-content { display: none; padding: 1rem; background: #1a1f3c; }
-    .division { margin-bottom: 12px; }
-    .division h3 { font-size: 1.1rem; margin-bottom: 8px; color: #FFD700; cursor: pointer; }
-    .division-content { display: none; margin-left: 15px; }
-    .class-list { list-style: none; padding-left: 0; }
-    .class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; cursor: pointer; color:white; }
-    .class-list li:hover, .class-list li:focus { background: #3a4070; outline: none; }
-    .no-caen { display:inline-block; margin:20px 0; padding:10px 16px; background:#FFD700; color:#000; border-radius:8px; cursor:pointer; font-weight:bold; }
-    mark { background:#FFD700; color:#000; padding:0 2px; border-radius:3px; }
-
-    @media (max-width: 768px) {
-      .sidebar { position: static; width: 100%; height: auto; }
-      .hero, .main { margin-left: 0; padding: 1rem; }
-      .hero h1 { font-size: 2rem; }
-      .hero .subtitle-text { font-size: 1rem; }
-      .search-bar { text-align: center; }
-      .search-bar input { width: 100%; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAEN Codes Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald&family=Josefin+Sans&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Josefin Sans', sans-serif; background: linear-gradient(135deg, gold, blue); color: #000; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002f6c; color: white; }
+.sidebar { width: 220px; background-color: #2a001a; color: white; height: 100vh; position: fixed; top: 0; left: 0; padding: 1rem; overflow-y: auto; }
+.sidebar h3 { margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { margin: 8px 0; cursor: pointer; }
+.sidebar ul li ul { display: none; margin-left: 15px; }
+.sidebar ul li.active ul { display: block; }
+.sidebar a { color: white; text-decoration: none; }
+.hero { margin-left: 230px; padding: 2rem; font-family: 'Oswald', sans-serif; }
+.hero h1 { font-size: 3rem; color:#000; }
+.hero .subtitle-wrapper { overflow: hidden; height: 2rem; position: relative; font-family: monospace; }
+.hero .subtitle-text { position: absolute; white-space: nowrap; animation: marqueeLoop 15s linear infinite; font-size: 1.3rem; color: #000; }
+@keyframes marqueeLoop { 0% { left: 100%; } 100% { left: -100%; } }
+.main { margin-left: 230px; padding: 2rem; }
+.search-bar { margin-bottom: 20px; text-align: right; }
+.search-bar input { padding: 10px; width: 300px; border-radius: 6px; border: none; }
+.accordion-section { background-color: #111836; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.accordion-header { background-color: #4B004B; color: white; padding: 1rem; cursor: pointer; font-weight: bold; border-bottom: 1px solid #333; }
+.accordion-content { display: none; padding: 1rem; background: #1a1f3c; }
+.division { margin-bottom: 12px; }
+.division h3 { font-size: 1.1rem; margin-bottom: 8px; color: #FFD700; cursor: pointer; }
+.division-content { display: none; margin-left: 15px; }
+.class-list { list-style: none; padding-left: 0; }
+.class-list li { background: #2a2f55; margin: 5px 0; padding: 8px; border-radius: 6px; transition: background 0.2s; cursor: pointer; color:white; }
+.class-list li:hover, .class-list li:focus { background: #3a4070; outline: none; }
+.no-caen { display:inline-block; margin:20px 0; padding:10px 16px; background:#FFD700; color:#000; border-radius:8px; cursor:pointer; font-weight:bold; }
+mark { background:#FFD700; color:#000; padding:0 2px; border-radius:3px; }
+@media (max-width: 768px) {
+.sidebar { position: static; width: 100%; height: auto; }
+.hero, .main { margin-left: 0; padding: 1rem; }
+.hero h1 { font-size: 2rem; }
+.hero .subtitle-text { font-size: 1rem; }
+.search-bar { text-align: center; }
+.search-bar input { width: 100%; }
+}
+</style>
 </head>
 <body>
-  <header>
-    <div><strong>Done Files Romania</strong></div>
-  </header>
-  <div class="sidebar" aria-label="Site navigation">
-    <h3>Menu</h3>
-    <ul>
-      <li>Business Type Categories</li>
-      <li>Document Checklist</li>
-      <li>Useful Tools</li>
-      <li>Quick Links</li>
-      <li>Language Switcher</li>
-      <li>Contact / Help</li>
-    </ul>
-  </div>
-  <section class="hero">
-    <h1>Done Files Romania</h1>
-    <div class="subtitle-wrapper" aria-hidden="true">
-      <div class="subtitle-text">simple solutions for opening your business - fast, reliable, done for you</div>
-    </div>
-  </section>
-  <main class="main">
-    <div class="search-bar">
-      <label for="searchInput" class="sr-only" style="position:absolute;left:-9999px;">Caută activitate sau cod CAEN</label>
-      <input type="text" id="searchInput" placeholder="Caută activitate sau cod CAEN..." aria-label="Caută activitate sau cod CAEN">
-    </div>
-    <div id="caenContainer">Se încarcă datele CAEN...</div>
-    <div>
-      <span class="no-caen" role="button" tabindex="0" onclick="selectNoCaen()" onkeydown="if(event.key==='Enter'||event.key===' '){selectNoCaen();}">Nu am CAEN (continuă fără)</span>
-    </div>
-  </main>
-  <script>
+<header>
+<div><strong>Done Files Romania</strong></div>
+</header>
+<div class="sidebar" aria-label="Site navigation">
+<h3>Menu</h3>
+<ul>
+<li>Business Type Categories</li>
+<li>Document Checklist</li>
+<li>Useful Tools</li>
+<li class="has-sub">Quick Links
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="details.html">CAEN Codes</a></li>
+<li><a href="docs.html">Docs / Papers</a></li>
+<li><a href="faq.html">FAQ</a></li>
+<li><a href="contact.html">Contact</a></li>
+});
     const caenData = [
   {
     "sectiune": "A. AGRICULTURĂ, SILVICULTURĂ ȘI PESCUIT",
@@ -919,151 +902,72 @@
 }
  
     ];
-     const INDUSTRY_PREFIXES = {
-      "IT & Software": ["58","61","62","63"],
-      "Hospitality & Restaurants": ["55","56"],
-      "Construction & Real Estate": ["41","42","43","68"],
-      "Transport & Logistics": ["49","50","51","52","53"],
-      "Agriculture": ["01","02","03"]
-    };
+   const INDUSTRY_PREFIXES = {
+sectionContent.appendChild(division);
+sectionCard.appendChild(sectionHeader);
+sectionCard.appendChild(sectionContent);
+frag.appendChild(sectionCard);
+}
+});
+container.innerHTML = '';
+container.appendChild(frag);
+}
 
-    const container = document.getElementById("caenContainer");
-    const searchInput = document.getElementById("searchInput");
 
-    function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-    function debounce(fn, delay){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn.apply(null,a), delay); }; }
+function highlight(li, code, name, q){
+if(!q){
+li.innerHTML = `<strong>${code}</strong> - ${name}`;
+return;
+}
+const rx = new RegExp(escapeRegExp(q), 'ig');
+const hCode = code.replace(rx, m=>`<mark>${m}</mark>`);
+const hName = name.replace(rx, m=>`<mark>${m}</mark>`);
+li.innerHTML = `<strong>${hCode}</strong> - ${hName}`;
+}
 
-    const index = [];
 
-    function buildDOM(){
-      const selectedIndustry = localStorage.getItem("selectedIndustry");
-      let dataToRender = caenData;
+function applySearch(q){
+const term = (q||'').toLowerCase();
+let anyVisibleInSection = new Map();
+let anyVisibleInDivision = new Map();
 
-      if(selectedIndustry && INDUSTRY_PREFIXES[selectedIndustry]){
-        const prefixes = INDUSTRY_PREFIXES[selectedIndustry];
-        dataToRender = caenData.map(sec => {
-          const classes = sec.clase.filter(c => prefixes.some(p => c.cod.startsWith(p)));
-          return { ...sec, clase: classes };
-        }).filter(sec => sec.clase.length > 0);
-      }
 
-      const frag = document.createDocumentFragment();
-      dataToRender.forEach(section => {
-        const sectionCard = document.createElement('div');
-        sectionCard.className = 'accordion-section';
+index.forEach(row => {
+const match = !term || row.search.includes(term);
+row.li.style.display = match ? '' : 'none';
+if(match){
+highlight(row.li, row.origCode, row.origName, term);
+anyVisibleInSection.set(row.sectionEl, true);
+anyVisibleInDivision.set(row.divisionEl, true);
+}
+});
 
-        const sectionContent = document.createElement('div');
-        sectionContent.className = 'accordion-content';
 
-        const sectionHeader = document.createElement('div');
-        sectionHeader.className = 'accordion-header';
-        sectionHeader.textContent = section.sectiune;
-        sectionHeader.addEventListener('click', ()=>{
-          sectionContent.style.display = sectionContent.style.display === 'block' ? 'none' : 'block';
-        });
+const divisions = new Set(index.map(r=>r.divisionEl));
+divisions.forEach(div => {
+div.style.display = anyVisibleInDivision.get(div) ? '' : 'none';
+});
 
-        const division = document.createElement('div');
-        division.className = 'division';
 
-        const divContent = document.createElement('div');
-        divContent.className = 'division-content';
+const sections = new Set(index.map(r=>r.sectionEl));
+sections.forEach(sec => {
+sec.style.display = anyVisibleInSection.get(sec) ? '' : 'none';
+});
+}
 
-        const divHeader = document.createElement('h3');
-        divHeader.textContent = section.diviziune;
-        divHeader.addEventListener('click', ()=>{
-          divContent.style.display = divContent.style.display === 'block' ? 'none' : 'block';
-        });
 
-        const ul = document.createElement('ul');
-        ul.className = 'class-list';
+function selectNoCaen(){
+localStorage.setItem('selectedCaen', 'None');
+window.location.href = 'wizard.html';
+}
 
-        section.clase.forEach(cl => {
-          const li = document.createElement('li');
-          li.setAttribute('role','button');
-          li.setAttribute('tabindex','0');
-          li.innerHTML = `<strong>${cl.cod}</strong> - ${cl.denumire}`;
 
-          const go = ()=>{
-            localStorage.setItem('selectedCaen', cl.cod + ' - ' + cl.denumire);
-            window.location.href = 'wizard.html';
-          };
-          li.addEventListener('click', go);
-          li.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+const debouncedSearch = debounce(val => applySearch(val), 200);
 
-          ul.appendChild(li);
 
-          index.push({
-            li,
-            origCode: cl.cod,
-            origName: cl.denumire,
-            search: (cl.cod + ' ' + cl.denumire).toLowerCase(),
-            divisionEl: division,
-            sectionEl: sectionCard
-          });
-        });
-
-        if(ul.children.length){
-          divContent.appendChild(ul);
-          division.appendChild(divHeader);
-          division.appendChild(divContent);
-          sectionContent.appendChild(division);
-          sectionCard.appendChild(sectionHeader);
-          sectionCard.appendChild(sectionContent);
-          frag.appendChild(sectionCard);
-        }
-      });
-      container.innerHTML = '';
-      container.appendChild(frag);
-    }
-
-    function highlight(li, code, name, q){
-      if(!q){
-        li.innerHTML = `<strong>${code}</strong> - ${name}`;
-        return;
-      }
-      const rx = new RegExp(escapeRegExp(q), 'ig');
-      const hCode = code.replace(rx, m=>`<mark>${m}</mark>`);
-      const hName = name.replace(rx, m=>`<mark>${m}</mark>`);
-      li.innerHTML = `<strong>${hCode}</strong> - ${hName}`;
-    }
-
-    function applySearch(q){
-      const term = (q||'').toLowerCase();
-      let anyVisibleInSection = new Map();
-      let anyVisibleInDivision = new Map();
-
-      index.forEach(row => {
-        const match = !term || row.search.includes(term);
-        row.li.style.display = match ? '' : 'none';
-        if(match){
-          highlight(row.li, row.origCode, row.origName, term);
-          anyVisibleInSection.set(row.sectionEl, true);
-          anyVisibleInDivision.set(row.divisionEl, true);
-        }
-      });
-
-      const divisions = new Set(index.map(r=>r.divisionEl));
-      divisions.forEach(div => {
-        div.style.display = anyVisibleInDivision.get(div) ? '' : 'none';
-      });
-
-      const sections = new Set(index.map(r=>r.sectionEl));
-      sections.forEach(sec => {
-        sec.style.display = anyVisibleInSection.get(sec) ? '' : 'none';
-      });
-    }
-
-    function selectNoCaen(){
-      localStorage.setItem('selectedCaen', 'None');
-      window.location.href = 'wizard.html';
-    }
-
-    const debouncedSearch = debounce(val => applySearch(val), 200);
-
-    buildDOM();
-    applySearch('');
-    searchInput.addEventListener('input', e => debouncedSearch(e.target.value));
-  </script>
+buildDOM();
+applySearch('');
+searchInput.addEventListener('input', e => debouncedSearch(e.target.value));
+</script>
 </body>
 </html>
-
